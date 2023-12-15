@@ -1,3 +1,7 @@
+import http from 'http'
+import debug from 'debug'
+
+const serverDebug = debug('server')
 export default class Server {
   constructor(api, port) {
     this.api = api
@@ -6,11 +10,16 @@ export default class Server {
 
   listen() {
     return new Promise((resolve) => {
-      let server
-      server = this.api.getExpressApp().listen(this.port, () => {
-        console.log(`server "${server}" running at port ${this.port}`)
+      const app = this.api.getExpressApp()
+      const port = this.port
+      const server = http.createServer(app)
+
+      server.once('listening', () => {
+        serverDebug('listening')
         return resolve(server)
       })
+
+      return server.listen(port)
     })
   }
 }

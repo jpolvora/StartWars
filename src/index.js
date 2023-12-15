@@ -1,15 +1,36 @@
-import 'dotenv/config.js'
 import { env } from './env.js'
 import Api from './api.js'
 import Server from './server.js'
+import GracefulShutdown from 'http-graceful-shutdown'
+
+function preShutdownFunction() {}
+
+async function shutdownFunction() {
+  //close mongodb connection
+}
+
+function finalFunction() {
+  console.log('final function shutdown')
+}
 
 async function start() {
   const api = new Api()
   const server = new Server(api, env.PORT)
   try {
-    await server.listen()
+    const httpServer = await server.listen()
+
+    GracefulShutdown(httpServer, {
+      forceExit: true, // triggers process.exit() at the end of shutdown process
+      preShutdown: preShutdownFunction, // needed operation before httpConnections are shutted down
+      onShutdown: shutdownFunction, // shutdown function (async) - e.g. for cleanup DB, ...
+      finally: finalFunction, // finally function (sync) - e.g. for logging
+    })
+
+    console.log(
+      `server listening on port ${env.PORT} in ${env.NODE_ENV} environment`
+    )
   } catch (error) {
-    throw new Error('error on trying to run Server:' + error)
+    throw new Error(`error on trying to run Server:${error}`)
   }
 }
 
