@@ -2,16 +2,13 @@ import { env } from './env.js'
 import Api from './api.js'
 import Server from './server.js'
 import GracefulShutdown from 'http-graceful-shutdown'
-import { join } from 'path'
-import { dirname } from 'path'
+import { join, dirname } from 'path'
 import { fileURLToPath } from 'url'
 
 const __dirname = dirname(fileURLToPath(import.meta.url))
 
-function preShutdownFunction() {}
-
 async function shutdownFunction() {
-  //close mongodb connection
+  console.log('closing databse connections')
 }
 
 function finalFunction() {
@@ -27,7 +24,6 @@ async function start() {
 
     GracefulShutdown(httpServer, {
       forceExit: true, // triggers process.exit() at the end of shutdown process
-      preShutdown: preShutdownFunction, // needed operation before httpConnections are shutted down
       onShutdown: shutdownFunction, // shutdown function (async) - e.g. for cleanup DB, ...
       finally: finalFunction, // finally function (sync) - e.g. for logging
     })

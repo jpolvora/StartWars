@@ -15,8 +15,7 @@ export default class Api {
     readdirSync(routesPath).map(async (file) => {
       if (file.endsWith('.js')) {
         const fullFilePathModule = pathToFileURL(`${routesPath}/${file}`)
-
-        apiDebug('importing file %s', fullFilePathModule)
+        apiDebug('importing %s', fullFilePathModule)
         ;(await import(fullFilePathModule)).default(router)
       }
     })
