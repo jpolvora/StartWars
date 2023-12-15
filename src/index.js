@@ -16,14 +16,16 @@ function finalFunction() {
 }
 
 async function start() {
+  const api = new Api()
   const routesPath = join(__dirname, './routes')
-  const api = new Api(routesPath)
+  await api.configure(routesPath)
+
   const server = new Server(api, env.PORT)
   try {
     const httpServer = await server.listen()
 
     GracefulShutdown(httpServer, {
-      forceExit: true, // triggers process.exit() at the end of shutdown process
+      forceExit: false, // triggers process.exit() at the end of shutdown process
       onShutdown: shutdownFunction, // shutdown function (async) - e.g. for cleanup DB, ...
       finally: finalFunction, // finally function (sync) - e.g. for logging
     })

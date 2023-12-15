@@ -5,7 +5,9 @@
   "main": "src/index.js",
   "type": "module",
   "scripts": {
-    "test": "jest"
+    "test": "cross-env NODE_OPTIONS=--experimental-vm-modules jest --no-cache --passWithNoTests --runInBand --detectOpenHandles --verbose --coverage --forceExit",
+    "start": "node src/index.js",
+    "dev": "nodemon ./src/index.js  --watch .env --watch ./src"
   },
   "keywords": [
     "starwars",
@@ -24,6 +26,9 @@
     "http-graceful-shutdown": "^3.1.13"
   },
   "devDependencies": {
-    "nodemon": "^3.0.2"
+    "cross-env": "^7.0.3",
+    "jest": "^29.7.0",
+    "nodemon": "^3.0.2",
+    "supertest": "^6.3.3"
   }
 }
