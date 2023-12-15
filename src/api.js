@@ -1,11 +1,9 @@
 import express from 'express'
-import { readdir } from 'node:fs/promises'
-import debug from 'debug'
-import { pathToFileURL } from 'url'
-
-const apiDebug = debug('api')
+import { getIndexRouter, getImportRouter } from './routes/index.js'
 
 export default class Api {
+  isConfigured = false
+
   constructor() {
     const app = express()
 
@@ -16,21 +14,14 @@ export default class Api {
     this.isConfigured = false
   }
 
-  async configure(routesPath) {
+  async configure() {
     if (this.isConfigured) return
-
     this.isConfigured = true
 
-    const files = await readdir(routesPath)
+    const routers = [getIndexRouter(), getImportRouter()]
 
-    for (const file of files) {
-      if (file.endsWith('.js')) {
-        const router = express.Router()
-        const fullFilePathModule = pathToFileURL(`${routesPath}/${file}`)
-        apiDebug('importing %s', fullFilePathModule)
-        ;(await import(fullFilePathModule)).default(router)
-        this.app.use(router)
-      }
+    for (const router of routers) {
+      this.app.use('/api', router)
     }
   }
 

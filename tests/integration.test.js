@@ -2,6 +2,7 @@ import { agent as request } from 'supertest'
 import { join, dirname } from 'path'
 import Api from '../src/api.js'
 import { fileURLToPath } from 'url'
+import { randomUUID } from 'crypto'
 
 let api
 
@@ -18,18 +19,42 @@ afterAll(async () => {})
 
 test('it should be done', async () => {
   const sut = api.getExpressApp()
-  const response = await request(sut).get('/')
+  const response = await request(sut).get('/api')
   expect(response.statusCode).toBe(200)
 })
 
 test('it should be done 2', async () => {
   const sut = api.getExpressApp()
-  const response = await request(sut).get('/scripts')
+  const response = await request(sut).get('/api/import')
   expect(response.statusCode).toBe(200)
+})
+
+test('it should be done 3', async () => {
+  const sut = api.getExpressApp()
+
+  const payload = {
+    uuid: randomUUID(),
+  }
+
+  const response = await request(sut)
+    .post('/api/import')
+    .send({
+      ...payload,
+    })
+
+  expect(response.statusCode).toBe(201)
+})
+
+test('it should be done 3', async () => {
+  const sut = api.getExpressApp()
+  const response = await request(sut).post('/api/import')
+
+  expect(response.statusCode).toBe(400)
 })
 
 test('it should not be done', async () => {
   const sut = api.getExpressApp()
-  const response = await request(sut).get('/more')
+  const response = await request(sut).get('/api/invalid')
+
   expect(response.statusCode).toBe(404)
 })

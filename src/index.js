@@ -1,7 +1,6 @@
 import 'dotenv/config.js'
 import { join, dirname } from 'path'
 import { fileURLToPath } from 'url'
-
 import { env } from './env.js'
 import Api from './api.js'
 import Server from './server.js'
@@ -14,19 +13,18 @@ async function start() {
   await api.configure(routesPath)
   const server = new Server(api, env.PORT)
   try {
-    const httpServer = await server.listen()
+    await server.listen()
 
-    server.shutDownFn = configureGracefulShutdown(httpServer, env.NODE_ENV)
+    server.shutDownFn = configureGracefulShutdown(
+      server.httpServer,
+      env.NODE_ENV
+    )
 
     console.log(
       `server listening on port ${env.PORT} in ${env.NODE_ENV} environment`
     )
   } catch (error) {
     throw new Error(`error on trying to run Server:${error}`)
-    // } finally {
-    //   setTimeout(async () => {
-    //     await shutdown()
-    //   }, 30000)
   }
 }
 

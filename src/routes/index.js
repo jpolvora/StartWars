@@ -1,8 +1,12 @@
-export default (router) => {
+import express from 'express'
+
+export function getIndexRouter() {
+  const router = express.Router()
   router.get('/', (_, res) => {
-    return res.json({
-      success: true,
-      message: 'root',
-    })
+    return res.status(200).end()
   })
+
+  return router
 }
+
+export * from './import.js'

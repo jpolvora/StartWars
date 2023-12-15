@@ -4,7 +4,7 @@ import debug from 'debug'
 const serverDebug = debug('server')
 export default class Server {
   #shutDownFn
-  #server
+  #httpServer
 
   constructor(api, port) {
     this.api = api
@@ -15,16 +15,15 @@ export default class Server {
     return new Promise((resolve) => {
       const app = this.api.getExpressApp()
       const port = this.port
-      const server = http.createServer(app)
+      const httpServer = http.createServer(app)
+      this.#httpServer = httpServer
 
-      server.once('listening', () => {
+      httpServer.once('listening', () => {
         serverDebug('listening')
-        return resolve(server)
+        return resolve(httpServer)
       })
 
-      this.#server = server
-
-      return server.listen(port)
+      return httpServer.listen(port)
     })
   }
 
@@ -33,6 +32,10 @@ export default class Server {
    */
   set shutDownFn(value) {
     this.#shutDownFn = value
+  }
+
+  get httpServer() {
+    return this.#httpServer
   }
 
   async close() {
