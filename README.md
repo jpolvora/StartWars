@@ -32,9 +32,9 @@ Para executar em produção, ajuste as variáveis de ambiente corretamente e uti
     ├── src
     │   ├── api.js               # 2 - Cria a aplicação express, configura as rotas, mantendo a separação e testabilidade
     │   ├── env.js
-    │   ├── index.js             # 1 - Entrypoint da aplicação. Faz a composição entre aplicativo, HttpServer, configurações etc. e inicializa tudo
+    │   ├── index.js             # 1 - Entrypoint da aplicação. Faz a inicialização e vinculação entre rotas, servidor HTTP, mensageria e banco de dados. Composition Root, Graceful shutdown.
     │   ├── server.js            # 3 - Incializa o servidor http e consome o aplicativo Express
-    │   └── routes               # Contém os handlers
+    │   └── routes               # Contém os handlers para atender as requisições.
     │       ├── index.js
     │       └── scripts.js
 

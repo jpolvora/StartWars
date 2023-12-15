@@ -14,6 +14,8 @@ beforeEach(async () => {
 
 afterEach(() => {})
 
+afterAll(async () => {})
+
 test('it should be done', async () => {
   const sut = api.getExpressApp()
   const response = await request(sut).get('/')
