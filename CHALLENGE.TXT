@@ -1,0 +1,25 @@
+Objetivo do Desafio:
+
+Você deve criar dois containers utilizando o Docker Compose: um para o MongoDB e outro para o Node.js. Dentro do ambiente Node.js, desenvolva um sistema que interaja com a API Star Wars (https://swapi.dev/documentation) realizando as seguintes tarefas:
+
+Criar um script (API) que leia informações sobre personagens (nome, altura e gênero) e as armazene em uma collection do MongoDB.
+
+Criar um script (API) que recupere a lista de personagens do MongoDB, ordene-os alfabeticamente pelo nome e apresente os resultados.
+
+Entregáveis:
+Arquivo 'docker-compose.yml' configurando os containers necessários.
+
+Código-fonte da aplicação em Node.js.
+
+Arquivo README detalhando a estrutura do projeto, instruções de execução e outras informações consideradas relevantes.
+
+(Opcional, mas recomendado) Implementação de tratamento de erros, testes unitários e/ou uma interface de usuário simples.
+
+Instruções para Submissão:
+Você pode escolher entre as seguintes opções para enviar seu projeto:
+
+Repositório Git: Envie-nos o link do seu repositório (público ou privado). Por favor, certifique-se de fornecer acesso, se necessário.
+
+Arquivo Compactado: Comprima todos os arquivos relevantes em um arquivo ZIP e envie-o através do nosso portal de carreiras ou por e-mail, conforme instruído.
+
+Aplicação Hospedada: Forneça um link para a aplicação funcionando, juntamente com o código-fonte conforme descrito nas opções acima.

@@ -1,0 +1,25 @@
+{
+  "name": "startwars",
+  "version": "0.0.1",
+  "description": "star wars API to mongodb collection",
+  "main": "src/index.js",
+  "type": "module",
+  "scripts": {
+    "test": "jest"
+  },
+  "keywords": [
+    "starwars",
+    "swapi"
+  ],
+  "engines": {
+    "node": "20.x"
+  },
+  "author": "Jone Polvora",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.18.2"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.2"
+  }
+}
