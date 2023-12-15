@@ -12,6 +12,8 @@ export default class Api {
     app.use(express.json())
 
     this.app = app
+
+    this.isConfigured = false
   }
 
   async configure(routesPath) {

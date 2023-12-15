@@ -3,12 +3,11 @@ import { join, dirname } from 'path'
 import Api from '../src/api.js'
 import { fileURLToPath } from 'url'
 
-const __dirname = dirname(fileURLToPath(import.meta.url))
-
 let api
 
 beforeEach(async () => {
-  const routesPath = join(__dirname, '../src/routes')
+  const currentPath = dirname(fileURLToPath(import.meta.url))
+  const routesPath = join(currentPath, '../src/routes')
   api = new Api()
   await api.configure(routesPath)
 })
