@@ -2,6 +2,11 @@ import { env } from './env.js'
 import Api from './api.js'
 import Server from './server.js'
 import GracefulShutdown from 'http-graceful-shutdown'
+import { join } from 'path'
+import { dirname } from 'path'
+import { fileURLToPath } from 'url'
+
+const __dirname = dirname(fileURLToPath(import.meta.url))
 
 function preShutdownFunction() {}
 
@@ -14,7 +19,8 @@ function finalFunction() {
 }
 
 async function start() {
-  const api = new Api()
+  const routesPath = join(__dirname, './routes')
+  const api = new Api(routesPath)
   const server = new Server(api, env.PORT)
   try {
     const httpServer = await server.listen()
