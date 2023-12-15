@@ -4,15 +4,13 @@ StartWars
 
 Requisitos:
 
-* node 20
-* docker & docker compose funcionando
-* terminal para executar
+- node 20
+- docker & docker compose funcionando
+- terminal para executar
 
-
-Clonar o código: 
+Clonar o código:
 
 `git clone https://github.com/jpolvora/startwars.git`
-
 
 Instalar dependências:
 
@@ -28,7 +26,21 @@ Para executar em produção, ajuste as variáveis de ambiente corretamente e uti
 
 # Estrutura do projeto
 
+    startwars
+    ├── .env.example             # Exemplo de variáveis de ambiente com valores. Deve ser copiado para .env
+    ├── package.json
+    ├── src
+    │   ├── api.js               # 2 - Cria a aplicação express, configura as rotas, mantendo a separação e testabilidade
+    │   ├── env.js
+    │   ├── index.js             # 1 - Entrypoint da aplicação. Faz a composição entre aplicativo, HttpServer, configurações etc. e inicializa tudo
+    │   ├── server.js            # 3 - Incializa o servidor http e consome o aplicativo Express
+    │   └── routes               # Contém os handlers
+    │       ├── index.js
+    │       └── scripts.js
 
+`
+
+### Index.js
 
 # API's disponíveis
 
@@ -39,4 +51,3 @@ Para executar em produção, ajuste as variáveis de ambiente corretamente e uti
 `GET /api/personagens`: Listará todos os personagens cadastrados, de forma paginada.
 
 `GET /api/personagens/{id}`: Mostrará somente o personagem com o `id` informado.
-
