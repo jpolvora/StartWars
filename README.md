@@ -24,19 +24,22 @@ Para executar em ambiente de desenvolvimento, com `mongodb` instalado localmente
 
 Para executar em produção, ajuste as variáveis de ambiente corretamente e utilize `npm start`
 
+Para rodar os testes, utilize `npm run test`
+
 # Estrutura do projeto
 
     startwars
     ├── .env.example             # Exemplo de variáveis de ambiente com valores. Deve ser copiado para .env
-    ├── package.json
+    ├── package.json             # Pacotes, scripts e definições de projeto
     ├── src
     │   ├── api.js               # 2 - Cria a aplicação express, configura as rotas, mantendo a separação e testabilidade
     │   ├── env.js
+    │   ├── graceful.js          # 4 - Configura a instância do httpServer para utilizar graceful shutdown
     │   ├── index.js             # 1 - Entrypoint da aplicação. Faz a inicialização e vinculação entre rotas, servidor HTTP, mensageria e banco de dados. Composition Root, Graceful shutdown.
-    │   ├── server.js            # 3 - Incializa o servidor http e consome o aplicativo Express
+    │   ├── server.js            # 3 - Inicializa o servidor http e consome o aplicativo Express
     │   └── routes               # Contém os handlers para atender as requisições.
-    │       ├── index.js
-    │       └── scripts.js
+    │       ├── index.js         # Rota padrão /api
+    │       └── import.js        # Rotas de import
 
 `
 
