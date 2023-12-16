@@ -21,42 +21,31 @@ export class ExecuteImport {
       return lastSegment
     }
 
+    function toDto(item) {
+      const id = getIdFromUrl(item.url)
+      const person = {
+        id: Number(id),
+        nome: item.name,
+        altura: item.height,
+        genero: item.gender,
+      }
+
+      return person
+    }
+
     console.log(`executing import: ${msg.next}`)
     try {
       const response = await this.httpClient.get(msg.next)
       const data = JSON.parse(response.data)
+      const people = data.results.map(toDto)
 
-      //console.log(data)
-
-      const people = []
-      for (const result of data.results) {
-        const id = getIdFromUrl(result.url)
-
-        const person = {
-          updateOne: {
-            filter: { _id: id },
-            upsert: true,
-            update: {
-              $set: {
-                _id: id,
-                nome: result.name,
-                altura: result.height,
-                genero: result.gender,
-              },
-            },
-          },
-        }
-
-        people.push(person)
-      }
+      //save data in personagens collection gateway
 
       var gw = new PersonagensCollection(this.db)
-      await gw.write(people)
-
-      //save data in repository
+      await gw.saveAllAsync(people)
 
       if (data.next) {
-        //schedule next job
+        //schedule next job continuation
         await this.queue.publish(Events.importScheduled, {
           uuid: msg.uuid,
           next: data.next,
