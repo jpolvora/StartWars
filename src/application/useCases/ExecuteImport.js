@@ -54,7 +54,7 @@ export class ExecuteImport {
           next: data.next,
         })
       } else {
-        await this.queue.publish('importExecuted', {
+        await this.queue.publish(Events.importFinished, {
           uuid: msg.uuid,
         })
       }
