@@ -1,11 +1,11 @@
 import { randomUUID } from 'crypto'
+import Import from '../application/useCases/Import.js'
 
 export function addImportRoutes(router) {
-  router.get('/import', (_, res) => {
-    return res.json({
-      success: true,
-      uuid: randomUUID(),
-    })
+  router.get('/import', async (_, res) => {
+    var useCase = new Import()
+    var result = await useCase.execute()
+    return res.json(result)
   })
 
   router.post('/import', (req, res) => {
