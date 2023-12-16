@@ -4,3 +4,4 @@ coverage/
 .env
 .vscode/
 !**/.vscode/extensions.json
+.tmp/

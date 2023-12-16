@@ -1,0 +1,63 @@
+# Comments are provided throughout this file to help you get started.
+# If you need more help, visit the Docker compose reference guide at
+# https://docs.docker.com/compose/compose-file/
+
+# Here the instructions define your application as a service called "server".
+# This service is built from the Dockerfile in the current directory.
+# You can add other services your application may depend on here, such as a
+# database or a cache. For examples, see the Awesome Compose repository:
+# https://github.com/docker/awesome-compose
+services:
+  server: 
+    restart: on-failure
+    build:
+      context: .
+    container_name: startwars
+    environment:
+      PORT: 3000
+      NODE_ENV: production
+      AMQP_URL: amqp://admin:admin@rabbitmq:5672
+      MONGODB_URI: mongodb://user:pass@mongodb
+      API_URL: https://swapi.dev/api
+    ports:
+      - 3000:3000
+    depends_on:
+      mongodb:
+        condition: service_started
+      rabbitmq:
+        condition: service_started
+    links: 
+        - rabbitmq
+        - mongodb
+
+  rabbitmq:
+    image: "rabbitmq:3.8-management-alpine"
+    container_name: rabbitmq_container
+    hostname: rabbitmq
+    ports:
+      - "15672:15672"
+      - "5672:5672"
+    # healthcheck:
+    #     test: ["CMD", "curl", "-f", "http://rabbitmq:15672"]
+    #     interval: 10s
+    #     timeout: 10s
+    #     retries: 10
+    #     start_period: 20s
+    volumes:
+      - "./.tmp/rabbitmq_data:/var/lib/rabbitmq/mnesia"  
+    environment:
+      - RABBITMQ_DEFAULT_USER=admin
+      - RABBITMQ_DEFAULT_PASS=admin
+
+  mongodb:
+    image: mongodb/mongodb-community-server:6.0-ubi8
+    container_name: mongodb_container
+    ports:
+      - '27017:27017'    
+    environment:
+      - MONGODB_INITDB_ROOT_USERNAME=user
+      - MONGODB_INITDB_ROOT_PASSWORD=pass
+    volumes:
+      - type: bind
+        source: ./.tmp/mongodb
+        target: /data/db

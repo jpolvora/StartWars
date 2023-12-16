@@ -7,7 +7,9 @@
   "scripts": {
     "test": "cross-env NODE_OPTIONS=--experimental-vm-modules jest --no-cache --passWithNoTests --runInBand --detectOpenHandles --verbose --coverage --forceExit",
     "start": "node src/index.js",
-    "dev": "nodemon ./src/index.js  --watch .env --watch ./src"
+    "dev": "nodemon ./src/index.js  --watch .env --watch ./src",
+    "compose:up": "docker compose up --build",
+    "compose:down": "docker compose down -v"
   },
   "keywords": [
     "starwars",
