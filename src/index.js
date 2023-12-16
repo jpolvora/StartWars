@@ -3,16 +3,16 @@ import { env } from './env.js'
 import Api from './api.js'
 import Server from './server.js'
 import RabbitMQAdapter from './infra/RabbitMQAdapter.js'
-import { configureGracefulShutdown } from './graceful.js'
 import Amqp from './amqp.js'
+import { configureGracefulShutdown } from './graceful.js'
 
 async function start() {
   const queue = new RabbitMQAdapter(env.AMQP_URL)
   const amqp = new Amqp(queue)
-
-  const api = new Api({
+  const container = {
     amqp,
-  })
+  }
+  const api = new Api(container)
   const app = api.initialize()
   const server = new Server(app, env.PORT)
 

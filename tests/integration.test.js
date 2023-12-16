@@ -9,7 +9,15 @@ let expressApp
 beforeEach(async () => {
   const currentPath = dirname(fileURLToPath(import.meta.url))
   const routesPath = join(currentPath, '../src/routes')
-  const api = new Api()
+  const container = {
+    amqp: {
+      connect: () => {},
+      publish: () => {},
+      consume: () => {},
+    },
+  }
+
+  const api = new Api(container)
   expressApp = api.initialize(routesPath)
 })
 
