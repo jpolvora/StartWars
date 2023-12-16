@@ -3,6 +3,21 @@ export class PersonagensCollection {
     this.personagens = db.collection('personagens')
   }
 
+  async getById(id) {
+    const result = await this.personagens.findOne({ _id: id })
+    return result
+  }
+
+  async getAll() {
+    const result = []
+    const cursor = this.personagens.find({}).sort({ nome: 1 })
+    for await (const doc of cursor) {
+      result.push(doc)
+    }
+
+    return result
+  }
+
   async saveAllAsync(people) {
     //format object to the bulkWrite shape
 

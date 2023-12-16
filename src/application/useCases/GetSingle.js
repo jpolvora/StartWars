@@ -1,11 +1,11 @@
 export class GetSingle {
   constructor(container) {
-    this.container = container
+    this.personagens = container.personagens
   }
 
   async execute(input) {
-    return {
-      id: input,
-    }
+    const result = await this.personagens.getById(input)
+
+    return result
   }
 }

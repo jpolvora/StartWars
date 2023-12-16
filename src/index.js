@@ -9,6 +9,7 @@ import {
   MongoDbAdapter,
   RabbitMQAdapter,
 } from './infra/index.js'
+import { PersonagensCollection } from './infra/PersonagensCollection.js'
 
 async function start() {
   const httpClient = new Axios({
@@ -17,13 +18,18 @@ async function start() {
 
   const mongoDbAdapter = new MongoDbAdapter(env.MONGODB_URI, 'startwars')
   const db = await mongoDbAdapter.connect()
+  const personagens = new PersonagensCollection(db)
 
-  const amqp = new AmqpServer(new RabbitMQAdapter(env.AMQP_URL), httpClient, db)
+  const amqp = new AmqpServer(
+    new RabbitMQAdapter(env.AMQP_URL),
+    httpClient,
+    personagens
+  )
 
   const container = {
     amqp,
     httpClient,
-    db,
+    personagens,
     env,
   }
 

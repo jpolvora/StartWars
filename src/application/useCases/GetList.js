@@ -1,9 +1,11 @@
 export class GetList {
   constructor(container) {
-    this.container = container
+    this.personagens = container.personagens
   }
 
-  async execute(input) {
-    return []
+  async execute() {
+    const result = await this.personagens.getAll()
+
+    return result
   }
 }

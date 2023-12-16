@@ -6,10 +6,10 @@ import { PersonagensCollection } from '../../infra/PersonagensCollection.js'
  */
 
 export class ExecuteImport {
-  constructor(queue, httpClient, db) {
+  constructor(queue, httpClient, personagens) {
     this.queue = queue
     this.httpClient = httpClient
-    this.db = db
+    this.personagens = personagens
   }
 
   async execute(msg) {
@@ -40,9 +40,7 @@ export class ExecuteImport {
       const people = data.results.map(toDto)
 
       //save data in personagens collection gateway
-
-      var gw = new PersonagensCollection(this.db)
-      await gw.saveAllAsync(people)
+      await this.personagens.saveAllAsync(people)
 
       if (data.next) {
         //schedule next job continuation

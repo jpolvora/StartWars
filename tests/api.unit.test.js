@@ -2,7 +2,7 @@ import 'dotenv/config'
 import { env } from '../src/config/env.js'
 import { ExpressAdapter } from '../src/infra/ExpressAdapter'
 
-describe('unit tests for Api Class', () => {
+describe('unit tests for ExpressAdapter Class', () => {
   it('calling configure twice returns same instance', async () => {
     const container = {
       amqp: {
