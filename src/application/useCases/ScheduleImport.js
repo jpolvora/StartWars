@@ -9,6 +9,7 @@ export class ScheduleImport {
   async execute(input) {
     const event = {
       uuid: input,
+      next: false,
     }
 
     await this.queue.publish('jobScheduled', event)
