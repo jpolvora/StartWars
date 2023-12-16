@@ -1,4 +1,4 @@
-import { PeopleCollection } from '../../infra/PeopleCollection.js'
+import { PeopleCollection } from '../repository/PeopleCollection.js'
 
 /**
  * Executes a scheduled import Job

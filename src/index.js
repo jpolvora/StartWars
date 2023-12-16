@@ -13,15 +13,16 @@ async function start() {
     baseURL: 'https://swapi.dev/api',
   })
 
-  const mongoDbConnection = new MongoDbConnection(env.MONGODB_URI)
+  const mongoDbConnection = new MongoDbConnection(env.MONGODB_URI, 'startwars')
+  const db = await mongoDbConnection.connect()
 
   const queue = new RabbitMQAdapter(env.AMQP_URL)
-  const amqp = new Amqp(queue, httpClient, mongoDbConnection.getClient())
+  const amqp = new Amqp(queue, httpClient, db)
 
   const container = {
     amqp,
     httpClient,
-    db: mongoDbConnection.getClient(),
+    db,
   }
 
   const api = new Api(container)

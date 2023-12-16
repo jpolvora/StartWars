@@ -1,14 +1,23 @@
-import { MongoClient, ServerApiVersion } from 'mongodb'
+import { MongoClient } from 'mongodb'
 
 export default class MongoDbConnection {
-  constructor(uri) {
-    // Create a MongoClient with a MongoClientOptions object to set the Stable API version
+  constructor(uri, dbName) {
     const client = new MongoClient(uri)
-
     this.client = client
+    this.db = client.db(dbName)
   }
 
-  getClient() {
-    return this.client.db('startwars')
+  async connect() {
+    await this.client.connect()
+    await this.db.command({ ping: 1 })
+    return this.db
+  }
+
+  async disconnect() {
+    await this.client.close()
+  }
+
+  getDb() {
+    return this.db
   }
 }
