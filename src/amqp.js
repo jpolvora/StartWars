@@ -8,14 +8,13 @@ export default class Amqp {
   async listen() {
     await this.queue.connect()
     this.queue.consume('jobScheduled', async (msg) => {
-      console.log(msg)
       const useCase = new ExecuteImport(this.queue)
       await useCase.execute(msg)
     })
 
-    // this.queue.consume('importExecuted', async () => {
-    //   console.log('importExecuted')
-    // })
+    this.queue.consume('importExecuted', async () => {
+      console.log('importExecuted')
+    })
   }
 
   async publish(event, data) {

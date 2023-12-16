@@ -18,10 +18,11 @@ export default class RabbitMQAdapter {
   async consume(queueName, callback) {
     const channel = await this.connection.createChannel()
     await channel.assertQueue(queueName, { durable: true })
+    await channel.prefetch(1)
     channel.consume(queueName, async (msg) => {
       const input = JSON.parse(msg.content.toString())
       await callback(input)
-      channel.ack(msg)
+      await channel.ack(msg)
     })
   }
 
