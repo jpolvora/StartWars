@@ -1,8 +1,8 @@
 import express from 'express'
 import {
-  getIndexRouter,
-  getImportRouter,
-  getPersonagensRouter,
+  addIndexRoutes,
+  addImportRoutes,
+  addPersonagensRoutes,
 } from './routes/index.js'
 
 export default class Api {
@@ -23,10 +23,12 @@ export default class Api {
     if (this.isConfigured) return this.app
     this.isConfigured = true
 
-    const routers = [getIndexRouter, getImportRouter, getPersonagensRouter]
+    const routes = [addIndexRoutes, addImportRoutes, addPersonagensRoutes]
 
-    for (const getRouter of routers) {
-      this.app.use('/api', getRouter())
+    for (const useRoute of routes) {
+      const router = express.Router()
+      useRoute(router)
+      this.app.use('/api', router)
     }
 
     return this.app

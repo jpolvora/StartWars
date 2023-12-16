@@ -1,8 +1,6 @@
 import { randomUUID } from 'crypto'
-import express from 'express'
 
-export function getImportRouter() {
-  const router = express.Router()
+export function addImportRoutes(router) {
   router.get('/import', (_, res) => {
     return res.json({
       success: true,
@@ -28,6 +26,4 @@ export function getImportRouter() {
       })
       .end()
   })
-
-  return router
 }

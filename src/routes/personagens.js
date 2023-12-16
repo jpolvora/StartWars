@@ -1,7 +1,4 @@
-import express from 'express'
-
-export function getPersonagensRouter() {
-  const router = express.Router()
+export function addPersonagensRoutes(router) {
   router.get('/personagens', (_, res) => {
     return res
       .status(200)
@@ -25,6 +22,4 @@ export function getPersonagensRouter() {
 
     return res.status(404).end()
   })
-
-  return router
 }
