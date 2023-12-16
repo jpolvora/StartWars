@@ -1,5 +1,9 @@
 import express from 'express'
-import { getIndexRouter, getImportRouter } from './routes/index.js'
+import {
+  getIndexRouter,
+  getImportRouter,
+  getPersonagensRouter,
+} from './routes/index.js'
 
 export default class Api {
   isConfigured = false
@@ -19,10 +23,10 @@ export default class Api {
     if (this.isConfigured) return this.app
     this.isConfigured = true
 
-    const routers = [getIndexRouter, getImportRouter]
+    const routers = [getIndexRouter, getImportRouter, getPersonagensRouter]
 
-    for (const router of routers) {
-      this.app.use('/api', router())
+    for (const getRouter of routers) {
+      this.app.use('/api', getRouter())
     }
 
     return this.app

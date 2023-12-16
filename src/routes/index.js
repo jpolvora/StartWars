@@ -1,4 +1,6 @@
 import express from 'express'
+export * from './import.js'
+export * from './personagens.js'
 
 export function getIndexRouter() {
   const router = express.Router()
@@ -8,5 +10,3 @@ export function getIndexRouter() {
 
   return router
 }
-
-export * from './import.js'
