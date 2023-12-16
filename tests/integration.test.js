@@ -1,5 +1,7 @@
+import 'dotenv/config'
+import { env } from '../src/config/env.js'
 import { agent as request } from 'supertest'
-import Api from '../src/api.js'
+import { ExpressAdapter } from '../src/infra/ExpressAdapter'
 import { randomUUID } from 'crypto'
 
 let expressApp
@@ -11,9 +13,10 @@ beforeEach(async () => {
       publish: () => {},
       consume: () => {},
     },
+    env,
   }
 
-  const api = new Api(container)
+  const api = new ExpressAdapter(container)
   expressApp = api.initialize()
 })
 

@@ -1,4 +1,5 @@
-import { PeopleCollection } from '../repository/PeopleCollection.js'
+import { Events } from '../../infra/Events.js'
+import { PersonagensCollection } from '../repository/PersonagensCollection.js'
 
 /**
  * Executes a scheduled import Job
@@ -12,9 +13,11 @@ export class ExecuteImport {
   }
 
   async execute(msg) {
+    if (!msg || !msg.next) return
+
+    console.log(`executing import: ${msg.next}`)
     try {
-      const endpoint = msg.next || 'people'
-      const response = await this.httpClient.get(endpoint)
+      const response = await this.httpClient.get(msg.next)
       const data = JSON.parse(response.data)
 
       //console.log(data)
@@ -39,14 +42,14 @@ export class ExecuteImport {
         people.push(person)
       }
 
-      var gw = new PeopleCollection(this.db)
+      var gw = new PersonagensCollection(this.db)
       await gw.write(people)
 
       //save data in repository
 
       if (data.next) {
         //schedule next job
-        await this.queue.publish('jobScheduled', {
+        await this.queue.publish(Events.importScheduled, {
           uuid: msg.uuid,
           next: data.next,
         })

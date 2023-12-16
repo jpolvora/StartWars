@@ -1,6 +1,6 @@
 import amqp from 'amqplib'
 
-export default class RabbitMQAdapter {
+export class RabbitMQAdapter {
   constructor(url) {
     this.url = url
   }

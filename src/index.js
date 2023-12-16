@@ -1,33 +1,35 @@
 import 'dotenv/config.js'
-import { env } from './env.js'
-import Api from './api.js'
-import Server from './server.js'
-import RabbitMQAdapter from './infra/RabbitMQAdapter.js'
-import Amqp from './amqp.js'
-import { configureGracefulShutdown } from './graceful.js'
+import { env } from './config/env.js'
 import { Axios } from 'axios'
-import MongoDbConnection from './infra/MongoDbConnection.js'
+import {
+  AmqpServer,
+  ExpressAdapter,
+  HttpServer,
+  configureGracefulShutdown,
+  MongoDbAdapter,
+  RabbitMQAdapter,
+} from './infra/index.js'
 
 async function start() {
   const httpClient = new Axios({
-    baseURL: 'https://swapi.dev/api',
+    baseURL: env.API_URL,
   })
 
-  const mongoDbConnection = new MongoDbConnection(env.MONGODB_URI, 'startwars')
-  const db = await mongoDbConnection.connect()
+  const mongoDbAdapter = new MongoDbAdapter(env.MONGODB_URI, 'startwars')
+  const db = await mongoDbAdapter.connect()
 
-  const queue = new RabbitMQAdapter(env.AMQP_URL)
-  const amqp = new Amqp(queue, httpClient, db)
+  const amqp = new AmqpServer(new RabbitMQAdapter(env.AMQP_URL), httpClient, db)
 
   const container = {
     amqp,
     httpClient,
     db,
+    env,
   }
 
-  const api = new Api(container)
+  const api = new ExpressAdapter(container)
   const app = api.initialize()
-  const server = new Server(app, env.PORT)
+  const server = new HttpServer(app, env.PORT)
 
   try {
     await Promise.all[(server.listen(), amqp.listen())]
@@ -49,9 +51,12 @@ start().catch(console.error.bind(console))
 
 //todo:
 /*
- * chamar a api e capturar os dados, em loop, paginando OK
- * gravar em bulk insert //em dev
+ * chamar a api e capturar os dados, em loop, paginando //OK
+ * gravar em bulk insert //ok
  * criar use case de listagem
  * criar frontend para agendar
  * criar frontend para listar
+ * criar docker-compose
+ * melhorar testes
+ * refatoracao
  */

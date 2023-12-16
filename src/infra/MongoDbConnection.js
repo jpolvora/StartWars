@@ -1,6 +1,6 @@
 import { MongoClient } from 'mongodb'
 
-export default class MongoDbConnection {
+export class MongoDbAdapter {
   constructor(uri, dbName) {
     const client = new MongoClient(uri)
     this.client = client

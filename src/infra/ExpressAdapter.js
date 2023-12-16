@@ -3,9 +3,9 @@ import {
   addIndexRoutes,
   addImportRoutes,
   addPersonagensRoutes,
-} from './routes/index.js'
+} from '../routes/index.js'
 
-export default class Api {
+export class ExpressAdapter {
   isConfigured = false
 
   constructor(container) {

@@ -2,7 +2,7 @@ import http from 'http'
 import debug from 'debug'
 
 const serverDebug = debug('server')
-export default class Server {
+export class HttpServer {
   #shutDownFn
   #httpServer
 

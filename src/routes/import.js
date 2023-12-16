@@ -12,7 +12,8 @@ export function addImportRoutes(router, container) {
 
   router.post('/import', async (req, res) => {
     if (req.body.uuid) {
-      const useCase = new ScheduleImport(container.amqp)
+      const initialUrl = `${container.env.API_URL}/people`
+      const useCase = new ScheduleImport(container.amqp, initialUrl)
       const result = await useCase.execute(req.body.uuid)
       return res.status(201).json(result).end()
     }

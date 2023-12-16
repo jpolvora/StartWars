@@ -1,4 +1,4 @@
-export class PeopleCollection {
+export class PersonagensCollection {
   constructor(db) {
     this.db = db
   }

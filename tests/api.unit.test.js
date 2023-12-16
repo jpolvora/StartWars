@@ -1,4 +1,6 @@
-import Api from '../src/api.js'
+import 'dotenv/config'
+import { env } from '../src/config/env.js'
+import { ExpressAdapter } from '../src/infra/ExpressAdapter'
 
 describe('unit tests for Api Class', () => {
   it('calling configure twice returns same instance', async () => {
@@ -8,12 +10,16 @@ describe('unit tests for Api Class', () => {
         publish: () => {},
         consume: () => {},
       },
+      env,
     }
 
-    const sut = new Api(container)
-    const a = sut.initialize()
-    const b = sut.initialize()
+    const api = new ExpressAdapter(container)
+    const a = api.initialize()
+    const b = api.initialize()
+    const c = api.initialize()
 
     expect(a).toBe(b)
+    expect(b).toBe(c)
+    expect(c).toBe(a)
   })
 })
