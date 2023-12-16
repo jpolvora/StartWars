@@ -6,16 +6,14 @@ export default class Server {
   #shutDownFn
   #httpServer
 
-  constructor(api, port) {
-    this.api = api
+  constructor(app, port) {
+    this.app = app
     this.port = port
   }
 
   listen() {
-    return new Promise((resolve) => {
-      const app = this.api.getExpressApp()
-      const port = this.port
-      const httpServer = http.createServer(app)
+    return new Promise((resolve, reject) => {
+      const httpServer = http.createServer(this.app)
       this.#httpServer = httpServer
 
       httpServer.once('listening', () => {
@@ -23,7 +21,12 @@ export default class Server {
         return resolve(httpServer)
       })
 
-      return httpServer.listen(port)
+      httpServer.once('error', (e) => {
+        serverDebug('error: %o', e)
+        return reject(e)
+      })
+
+      return httpServer.listen(this.port)
     })
   }
 

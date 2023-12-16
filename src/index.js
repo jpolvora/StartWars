@@ -10,8 +10,8 @@ async function start() {
   const currentPath = dirname(fileURLToPath(import.meta.url))
   const routesPath = join(currentPath, './routes')
   const api = new Api()
-  await api.configure(routesPath)
-  const server = new Server(api, env.PORT)
+  const app = api.initialize(routesPath)
+  const server = new Server(app, env.PORT)
   try {
     await server.listen()
 

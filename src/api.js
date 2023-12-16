@@ -7,6 +7,7 @@ export default class Api {
   constructor() {
     const app = express()
 
+    //place here all needed middlewares
     app.use(express.json())
 
     this.app = app
@@ -14,18 +15,16 @@ export default class Api {
     this.isConfigured = false
   }
 
-  async configure() {
-    if (this.isConfigured) return
+  initialize() {
+    if (this.isConfigured) return this.app
     this.isConfigured = true
 
-    const routers = [getIndexRouter(), getImportRouter()]
+    const routers = [getIndexRouter, getImportRouter]
 
     for (const router of routers) {
-      this.app.use('/api', router)
+      this.app.use('/api', router())
     }
-  }
 
-  getExpressApp() {
     return this.app
   }
 }
