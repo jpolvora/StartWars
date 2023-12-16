@@ -8,7 +8,9 @@ import {
 export default class Api {
   isConfigured = false
 
-  constructor() {
+  constructor(container) {
+    this.container = container
+
     const app = express()
 
     //place here all needed middlewares
@@ -27,7 +29,7 @@ export default class Api {
 
     for (const useRoute of routes) {
       const router = express.Router()
-      useRoute(router)
+      useRoute(router, this.container)
       this.app.use('/api', router)
     }
 

@@ -1,22 +1,20 @@
 import { randomUUID } from 'crypto'
-import Import from '../application/useCases/Import.js'
+import { ScheduleImport } from '../application/useCases/ScheduleImport.js'
 
-export function addImportRoutes(router) {
+export function addImportRoutes(router, container) {
   router.get('/import', async (_, res) => {
-    var useCase = new Import()
-    var result = await useCase.execute()
-    return res.json(result)
+    const result = {
+      uuid: randomUUID(),
+    }
+
+    return res.status(200).json(result).end()
   })
 
-  router.post('/import', (req, res) => {
+  router.post('/import', async (req, res) => {
     if (req.body.uuid) {
-      return res
-        .status(201)
-        .json({
-          success: true,
-          jobId: randomUUID(),
-        })
-        .end()
+      var useCase = new ScheduleImport(container.amqp)
+      var result = await useCase.execute(req.body.uuid)
+      return res.status(201).json(result).end()
     }
 
     return res

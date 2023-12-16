@@ -1,0 +1,6 @@
+POST http://localhost:3000/api/import HTTP/1.1
+content-type: application/json
+
+{
+    "uuid": "111994c7-81e7-4614-ad1f-9bb927751e14"    
+}
