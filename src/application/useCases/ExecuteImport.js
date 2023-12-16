@@ -1,5 +1,5 @@
 import { Events } from '../../infra/Events.js'
-import { PersonagensCollection } from '../repository/PersonagensCollection.js'
+import { PersonagensCollection } from '../../infra/PersonagensCollection.js'
 
 /**
  * Executes a scheduled import Job
@@ -15,6 +15,12 @@ export class ExecuteImport {
   async execute(msg) {
     if (!msg || !msg.next) return
 
+    function getIdFromUrl(url) {
+      const parts = url.split('/')
+      const lastSegment = parts.pop() || parts.pop() // handle potential trailing slash
+      return lastSegment
+    }
+
     console.log(`executing import: ${msg.next}`)
     try {
       const response = await this.httpClient.get(msg.next)
@@ -24,13 +30,15 @@ export class ExecuteImport {
 
       const people = []
       for (const result of data.results) {
+        const id = getIdFromUrl(result.url)
+
         const person = {
           updateOne: {
-            filter: { _id: result.url },
+            filter: { _id: id },
             upsert: true,
             update: {
               $set: {
-                _id: result.url,
+                _id: id,
                 nome: result.name,
                 altura: result.height,
                 genero: result.gender,

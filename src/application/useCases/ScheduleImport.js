@@ -4,8 +4,9 @@ import { Events } from '../../infra/Events.js'
  * Schedules an import Job by sending a message to the broker/queue
  */
 export class ScheduleImport {
-  constructor(queue, initialUrl) {
-    this.queue = queue
+  constructor(container) {
+    this.queue = container.amqp
+    const initialUrl = `${container.env.API_URL}/people`
     this.initialUrl = initialUrl
   }
 
