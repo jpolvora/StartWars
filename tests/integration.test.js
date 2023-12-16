@@ -1,14 +1,10 @@
 import { agent as request } from 'supertest'
-import { join, dirname } from 'path'
 import Api from '../src/api.js'
-import { fileURLToPath } from 'url'
 import { randomUUID } from 'crypto'
 
 let expressApp
 
 beforeEach(async () => {
-  const currentPath = dirname(fileURLToPath(import.meta.url))
-  const routesPath = join(currentPath, '../src/routes')
   const container = {
     amqp: {
       connect: () => {},
@@ -18,7 +14,7 @@ beforeEach(async () => {
   }
 
   const api = new Api(container)
-  expressApp = api.initialize(routesPath)
+  expressApp = api.initialize()
 })
 
 afterEach(() => {})
