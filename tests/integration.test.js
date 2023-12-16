@@ -6,12 +6,49 @@ import { randomUUID } from 'crypto'
 
 let expressApp
 
+function sleep(ms) {
+  return new Promise((resolve) => {
+    return setTimeout(() => {
+      return resolve()
+    }, ms)
+  })
+}
+
 beforeEach(async () => {
   const container = {
     amqp: {
       connect: () => {},
       publish: () => {},
       consume: () => {},
+    },
+    personagens: {
+      getById: async (id) => {
+        await sleep(100)
+        return {
+          id,
+          nome: 'fake' + id,
+          altura: 100,
+          peso: 100,
+        }
+      },
+
+      getAll: async () => {
+        await sleep(100)
+        return [
+          {
+            id: 1,
+            nome: 'fake 1',
+            altura: 100,
+            peso: 100,
+          },
+          {
+            id: 2,
+            nome: 'fake 2',
+            altura: 90,
+            peso: 110,
+          },
+        ]
+      },
     },
     env,
   }
