@@ -13,21 +13,29 @@ export class HttpServer {
 
   listen() {
     return new Promise((resolve, reject) => {
-      const app = this.app.initialize()
-      const httpServer = http.createServer(app)
-      this.#httpServer = httpServer
+      try {
+        const app = this.app.initialize()
+        const httpServer = http.createServer(app)
+        this.#httpServer = httpServer
 
-      httpServer.once('listening', () => {
-        serverDebug('listening')
-        return resolve(httpServer)
-      })
+        httpServer.once('listening', () => {
+          serverDebug('listening')
+          console.log(
+            `server listening on port ${this.port} in ${process.env.NODE_ENV} environment`
+          )
+          return resolve(httpServer)
+        })
 
-      httpServer.once('error', (e) => {
-        serverDebug('error: %o', e)
-        return reject(e)
-      })
+        httpServer.once('error', (e) => {
+          serverDebug('error: %o', e)
+          return reject(e)
+        })
 
-      return httpServer.listen(this.port)
+        return httpServer.listen(this.port)
+      } catch (e) {
+        console.error('Erro ao tentar iniciar o servidor http: ' + e)
+        throw e
+      }
     })
   }
 

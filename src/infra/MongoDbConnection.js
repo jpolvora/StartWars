@@ -8,8 +8,13 @@ export class MongoDbAdapter {
   }
 
   async connect() {
-    await this.client.connect()
-    await this.db.command({ ping: 1 })
+    try {
+      await this.client.connect()
+      await this.db.command({ ping: 1 })
+    } catch (e) {
+      console.error('Erro ao conectar no banco de dados: ' + e)
+      throw e
+    }
   }
 
   async disconnect() {

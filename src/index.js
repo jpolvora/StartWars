@@ -12,6 +12,7 @@ import {
 import { PersonagensCollection } from './infra/PersonagensCollection.js'
 import { Registry } from './infra/container.js'
 import { Services } from './infra/Services.js'
+import { retry } from './utils/index.js'
 
 async function start() {
   const container = Registry.instance
@@ -31,20 +32,20 @@ async function start() {
   const server = new HttpServer(new ExpressAdapter(container), env.PORT)
 
   try {
+    const retryOptions = { retries: 10, retryIntervalMs: 1000 }
+
     await Promise.all[
-      (server.listen(), amqp.listen(), mongoDbAdapter.connect())
+      (retry(() => server.listen(), retryOptions),
+      retry(() => amqp.listen(), retryOptions),
+      retry(() => mongoDbAdapter.connect(), retryOptions))
     ]
 
     server.shutDownFn = configureGracefulShutdown(
       server.httpServer,
       env.NODE_ENV
     )
-
-    console.log(
-      `server listening on port ${env.PORT} in ${env.NODE_ENV} environment`
-    )
   } catch (e) {
-    throw new Error(`error on trying to run Server: ${e}`)
+    throw new Error(`error on trying to run Application: ${e}`)
   }
 }
 
@@ -55,9 +56,7 @@ start().catch(console.error.bind(console))
  * chamar a api e capturar os dados, em loop, paginando //OK
  * gravar em bulk insert //ok
  * criar use case de listagem
- * criar frontend para agendar
- * criar frontend para listar
- * criar docker-compose
+ * criar docker-compose ok
  * melhorar testes
- * refatoracao
+ * refatoracao container
  */

@@ -1,14 +1,19 @@
 import amqp from 'amqplib'
 
 export class RabbitMQAdapter {
+  connection = null
+
   constructor(url) {
     this.url = url
   }
 
-  connection
-
   async connect() {
-    this.connection = await amqp.connect(this.url)
+    try {
+      this.connection = await amqp.connect(this.url)
+    } catch (e) {
+      console.error('Erro ao conectar no servidor AMQP: ' + e)
+      throw e
+    }
   }
 
   async disconnect() {
