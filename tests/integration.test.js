@@ -3,8 +3,49 @@ import { env } from '../src/config/env.js'
 import { agent as request } from 'supertest'
 import { ExpressAdapter } from '../src/infra/ExpressAdapter'
 import { randomUUID } from 'crypto'
+import { Registry } from '../src/infra/container.js'
+import { Services } from '../src/infra/Services.js'
 
 let expressApp
+
+const container = Registry.instance
+container.set(Services.env, env)
+
+container.set(Services.amqp, {
+  connect: () => {},
+  publish: () => {},
+  consume: () => {},
+})
+
+container.set(Services.personagens, {
+  getById: async (id) => {
+    await sleep(100)
+    return {
+      id,
+      nome: 'fake' + id,
+      altura: 100,
+      peso: 100,
+    }
+  },
+
+  getAll: async () => {
+    await sleep(100)
+    return [
+      {
+        id: 1,
+        nome: 'fake 1',
+        altura: 100,
+        peso: 100,
+      },
+      {
+        id: 2,
+        nome: 'fake 2',
+        altura: 90,
+        peso: 110,
+      },
+    ]
+  },
+})
 
 function sleep(ms) {
   return new Promise((resolve) => {
@@ -15,44 +56,6 @@ function sleep(ms) {
 }
 
 beforeEach(async () => {
-  const container = {
-    amqp: {
-      connect: () => {},
-      publish: () => {},
-      consume: () => {},
-    },
-    personagens: {
-      getById: async (id) => {
-        await sleep(100)
-        return {
-          id,
-          nome: 'fake' + id,
-          altura: 100,
-          peso: 100,
-        }
-      },
-
-      getAll: async () => {
-        await sleep(100)
-        return [
-          {
-            id: 1,
-            nome: 'fake 1',
-            altura: 100,
-            peso: 100,
-          },
-          {
-            id: 2,
-            nome: 'fake 2',
-            altura: 90,
-            peso: 110,
-          },
-        ]
-      },
-    },
-    env,
-  }
-
   const api = new ExpressAdapter(container)
   expressApp = api.initialize()
 })

@@ -13,7 +13,8 @@ export class HttpServer {
 
   listen() {
     return new Promise((resolve, reject) => {
-      const httpServer = http.createServer(this.app)
+      const app = this.app.initialize()
+      const httpServer = http.createServer(app)
       this.#httpServer = httpServer
 
       httpServer.once('listening', () => {

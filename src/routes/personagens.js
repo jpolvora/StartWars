@@ -1,10 +1,13 @@
-import { GetList } from '../application/useCases/GetList.js'
-import { GetSingle } from '../application/useCases/GetSingle.js'
+import { GetAllUseCase } from '../application/useCases/GetAllUseCase.js'
+import { GetByIdUseCase } from '../application/useCases/GetByIdUseCase.js'
+import { Services } from '../infra/Services.js'
 
 export function addPersonagensRoutes(router, container) {
+  const personagens = container.get(Services.personagens)
+
   router.get('/personagens', async (req, res) => {
-    const useCase = new GetList(container)
-    const result = await useCase.execute(req.params.page)
+    const useCase = new GetAllUseCase(personagens)
+    const result = await useCase.execute()
 
     return res
       .status(200)
@@ -19,7 +22,7 @@ export function addPersonagensRoutes(router, container) {
     const id = Number(req.params.id)
 
     if (id) {
-      const useCase = new GetSingle(container)
+      const useCase = new GetByIdUseCase(personagens)
       const result = await useCase.execute(id)
 
       return res.json({

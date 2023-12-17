@@ -5,7 +5,7 @@ import { PersonagensCollection } from '../../infra/PersonagensCollection.js'
  * Executes a scheduled import Job
  */
 
-export class ExecuteImport {
+export class ExecuteImportUseCase {
   constructor(queue, httpClient, personagens) {
     this.queue = queue
     this.httpClient = httpClient

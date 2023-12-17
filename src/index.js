@@ -10,35 +10,30 @@ import {
   RabbitMQAdapter,
 } from './infra/index.js'
 import { PersonagensCollection } from './infra/PersonagensCollection.js'
+import { Registry } from './infra/container.js'
+import { Services } from './infra/Services.js'
 
 async function start() {
-  const httpClient = new Axios({
-    baseURL: env.API_URL,
-  })
+  const container = Registry.instance
+  container.set(Services.env, env)
+  container.set(Services.httpClient, new Axios({ baseURL: env.API_URL }))
 
   const mongoDbAdapter = new MongoDbAdapter(env.MONGODB_URI, 'startwars')
-  const db = await mongoDbAdapter.connect()
-  const personagens = new PersonagensCollection(db)
 
-  const amqp = new AmqpServer(
-    new RabbitMQAdapter(env.AMQP_URL),
-    httpClient,
-    personagens
+  container.set(
+    Services.personagens,
+    new PersonagensCollection(mongoDbAdapter.db)
   )
 
-  const container = {
-    amqp,
-    httpClient,
-    personagens,
-    env,
-  }
-
-  const api = new ExpressAdapter(container)
-  const app = api.initialize()
-  const server = new HttpServer(app, env.PORT)
+  container.set(Services.queue, new RabbitMQAdapter(env.AMQP_URL))
+  const amqp = new AmqpServer(container)
+  container.set(Services.amqp, amqp)
+  const server = new HttpServer(new ExpressAdapter(container), env.PORT)
 
   try {
-    await Promise.all[(server.listen(), amqp.listen())]
+    await Promise.all[
+      (server.listen(), amqp.listen(), mongoDbAdapter.connect())
+    ]
 
     server.shutDownFn = configureGracefulShutdown(
       server.httpServer,

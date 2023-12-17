@@ -10,7 +10,6 @@ export class MongoDbAdapter {
   async connect() {
     await this.client.connect()
     await this.db.command({ ping: 1 })
-    return this.db
   }
 
   async disconnect() {

@@ -1,5 +1,5 @@
 import { randomUUID } from 'crypto'
-import { ScheduleImport } from '../application/useCases/ScheduleImport.js'
+import { ScheduleImportUseCase } from '../application/useCases/ScheduleImportUseCase.js'
 
 export function addImportRoutes(router, container) {
   router.get('/import', async (_, res) => {
@@ -12,7 +12,7 @@ export function addImportRoutes(router, container) {
 
   router.post('/import', async (req, res) => {
     if (req.body.uuid) {
-      const useCase = new ScheduleImport(container)
+      const useCase = new ScheduleImportUseCase(container)
       const result = await useCase.execute(req.body.uuid)
       return res.status(201).json(result).end()
     }

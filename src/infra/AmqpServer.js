@@ -1,18 +1,19 @@
-import { ExecuteImport } from '../application/useCases/ExecuteImport.js'
+import { ExecuteImportUseCase } from '../application/useCases/ExecuteImportUseCase.js'
 import { Events } from './Events.js'
+import { Services } from './Services.js'
 
 export class AmqpServer {
-  constructor(queue, httpClient, personagens) {
-    this.queue = queue
-    this.httpClient = httpClient
-    this.personagens = personagens
+  constructor(container) {
+    this.queue = container.get(Services.queue)
+    this.httpClient = container.get(Services.httpClient)
+    this.personagens = container.get(Services.personagens)
   }
 
   async listen() {
     await this.queue.connect()
 
     this.queue.consume(Events.importScheduled, async (msg) => {
-      const useCase = new ExecuteImport(
+      const useCase = new ExecuteImportUseCase(
         this.queue,
         this.httpClient,
         this.personagens

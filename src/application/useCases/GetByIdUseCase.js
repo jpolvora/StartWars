@@ -1,6 +1,6 @@
-export class GetSingle {
-  constructor(container) {
-    this.personagens = container.personagens
+export class GetByIdUseCase {
+  constructor(personagens) {
+    this.personagens = personagens
   }
 
   async execute(input) {

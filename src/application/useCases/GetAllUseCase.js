@@ -1,6 +1,6 @@
-export class GetList {
-  constructor(container) {
-    this.personagens = container.personagens
+export class GetAllUseCase {
+  constructor(personagens) {
+    this.personagens = personagens
   }
 
   async execute() {
