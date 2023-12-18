@@ -49,6 +49,49 @@
 
 ### Estrutura do projeto
 
-    O projeto foi escrito em NodeJS 20, consituído de:
-    -   Um endpoint que retorna um frontend escrito em .html
-    -   Endpoints para interação com API Rest
+    O projeto foi escrito em NodeJS v.20, consituído de:
+    -   Um endpoint que retorna um frontend escrito em .html ( http://localhost:3000/ )
+    -   Endpoints para interação com API Rest ( http://localhost:3000/api )
+    -   Endpoint para documentação swagger ( http://localhost:3000/doc )
+
+
+    Decisões de design
+
+    Utilizo neste projeto o conceito de `Listen to yourself`, utilizando RabbitMQ, de forma a simular um job scheduler. Desta forma, podemos "agendar" jobs através de mensagens enviadas para uma fila específica, e a própria aplicação escuta as mensagens da fila, de forma concorrente.
+    Como o endpoint da API `swapi` retorna 10 registros por vez, informando na response a url da próxima página, a cada página informada, agendamos um novo job.
+    Esse processo torna a importação mais lenta, porém, escalável, atendendo múltiplas requisições de forma a não sobrecarregar a API.
+    
+
+### Overview of design and patterns
+
+  - [Twelve Factor](https://en.wikipedia.org/wiki/Twelve-Factor_App_methodology)
+  - Clean Code
+    - Separation of Concerns (SOC)
+    - Don't Repeat Yourself (DRY)
+    - Keep It Simple, Silly (KISS)
+    - Small commits
+  - SOLID Features:
+    - Single Responsability Principle
+    - Service Locator (Dependency Inversion principle)
+  - Functional Programming
+  - DTO / Adapters / Mappers
+  - Composition over inheritance
+  - Encapsulation
+  - Asynchronous Programming (Async/Await/Promises)
+  - Listen to Yourself Pattern (outbox)
+  - Feature Flags
+  - Exception Handling
+  - Retry Policy
+  - TDD
+  - OOP
+  - Unit Tests
+  - Integration Tests
+  - REST
+
+#### Design Patterns
+
+### Technologies
+  - NodeJS 20
+  - MongoDB
+  - RabbitMQ
+  - Docker
