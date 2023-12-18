@@ -34,15 +34,22 @@ async function start() {
   try {
     const retryOptions = { retries: 9, retryIntervalMs: 1000 }
 
-    await Promise.all[
-      (retry(() => server.listen(), retryOptions),
-      retry(() => amqp.listen(), retryOptions),
-      retry(() => mongoDbAdapter.connect(), retryOptions))
-    ]
+    //await all promises in parallel
+    const serverPromise = retry(() => server.listen(), retryOptions)
+    const amqpPromise = retry(() => amqp.listen(), retryOptions)
+    const mongoDbPromise = retry(() => mongoDbAdapter.connect(), retryOptions)
+
+    await Promise.all([serverPromise, amqpPromise, mongoDbPromise])
+
+    console.log('all services connected successfully')
 
     server.shutDownFn = configureGracefulShutdown(
       server.httpServer,
-      env.NODE_ENV
+      env.NODE_ENV,
+      async (signal) => {
+        await mongoDbAdapter.disconnect()
+        await amqp.close()
+      }
     )
   } catch (e) {
     throw new Error(`error on trying to run Application: ${e}`)

@@ -11,6 +11,7 @@ export class MongoDbAdapter {
     try {
       await this.client.connect()
       await this.db.command({ ping: 1 })
+      console.log('Connected to mongodb')
     } catch (e) {
       console.error('Erro ao conectar no banco de dados: ' + e)
       throw e
@@ -19,6 +20,7 @@ export class MongoDbAdapter {
 
   async disconnect() {
     await this.client.close()
+    console.log('gracefully shutdown mongodb connection')
   }
 
   getDb() {

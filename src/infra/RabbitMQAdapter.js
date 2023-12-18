@@ -10,6 +10,7 @@ export class RabbitMQAdapter {
   async connect() {
     try {
       this.connection = await amqp.connect(this.url)
+      console.log('connected to rabbitmq')
     } catch (e) {
       console.error('Erro ao conectar no servidor AMQP: ' + e)
       throw e

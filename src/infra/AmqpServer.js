@@ -32,6 +32,7 @@ export class AmqpServer {
   }
 
   async close() {
-    await this.queue.close()
+    await this.queue.disconnect()
+    console.log('gracefully shutdown amqp connection')
   }
 }
