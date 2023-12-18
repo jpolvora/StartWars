@@ -4,8 +4,8 @@
 
 * Requisitos para executar via `docker compose`
 
-  - docker
-  - node 20
+  - Docker
+  - Node 20 LTS
 
 * Clonar o código:
 
@@ -23,6 +23,13 @@
 
     Para rodar os testes, utilize `npm run test`
 
+* Acessando os dados
+    
+    Durante a execução do projeto, abra o browser em `http://localhost:3000` e a tela de listagem irá se apresentar.
+    Inicialmente a tela mostrará um grid vazio.
+    Para popular os dados (executar a importação da `swapi`), clique no botão `Agendar Importação`. Uma mensagem de confirmação será exibida, indicando que o processo de importação foi agendado.
+    A execução da importação é assíncrona, executada de forma paginada.
+    Após alguns segundos, aperte F5 no navegador para acompanhar os dados sendo populados.
 
 ### API's disponíveis
 
@@ -33,3 +40,5 @@
 `GET /api/personagens`: Listará todos os personagens cadastrados, de forma paginada.
 
 `GET /api/personagens/{id}`: Mostrará somente o personagem com o `id` informado.
+
+### Estrutura do projeto
