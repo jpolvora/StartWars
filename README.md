@@ -31,6 +31,8 @@
     A execução da importação é assíncrona, executada de forma paginada.
     Após alguns segundos, aperte F5 no navegador para acompanhar os dados sendo populados.
 
+    Obs: No projeto há um arquivo `teste.http` que contém os endpoints a serem executados pelo plugin `Rest Client` do VSCODE.
+
 ### API's disponíveis
 
 `GET /api/import` : Pegar a chave para o job de importação dos dados via API do `swapi`, sobrescrevendo as informações já existentes no banco de dados.
