@@ -8,10 +8,10 @@ import {
   configureGracefulShutdown,
   MongoDbAdapter,
   RabbitMQAdapter,
+  PersonagensCollection,
+  Registry,
+  Services,
 } from './infra/index.js'
-import { PersonagensCollection } from './infra/PersonagensCollection.js'
-import { Registry } from './infra/container.js'
-import { Services } from './infra/Services.js'
 import { retry } from './utils/index.js'
 
 async function start() {

@@ -14,6 +14,7 @@
     <title>Document</title>
   </head>
   <body>
+    <button type="button" id="btnImportar">Importar Dados</button>
     <div id="example"></div>
   </body>
   <script>
@@ -21,7 +22,8 @@
       const container = document.querySelector('#example')
       const hot = new Handsontable(container, {
         colHeaders: ['Id', 'Nome', 'Altura', 'Gênero'],
-        data,        
+        data,
+        contextMenu: true,
         licenseKey: 'non-commercial-and-evaluation', // for non-commercial use only
       })
 
@@ -37,10 +39,40 @@
       return []
     }
 
+    async function scheduleImport() {
+      //pega o token de autorização
+      const responseInitial = await fetch('/api/import')
+      const jsonResponseInitial = await responseInitial.json()
+      const update = {
+        uuid: jsonResponseInitial.uuid,
+      }
+
+      if (!uuid) return alert("token não recebido");
+      
+      const options = {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(update),
+      }
+
+      const responseSchedule = await fetch('/api/import', options)
+      if (responseSchedule.status === 201) {
+        alert('ïmportação agendada!')
+      } else {
+        alert('importação não agendada')
+      }
+    }
+
     document.addEventListener('DOMContentLoaded', async () => {
       console.log('loaded')
       const data = await fetchData()
-      render(data)
+      await render(data)
+
+      document
+        .querySelector('#btnImportar')
+        .addEventListener('click', scheduleImport)
     })
   </script>
 </html>

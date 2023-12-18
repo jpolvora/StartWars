@@ -3,7 +3,7 @@ import { env } from '../src/config/env.js'
 import { agent as request } from 'supertest'
 import { ExpressAdapter } from '../src/infra/ExpressAdapter'
 import { randomUUID } from 'crypto'
-import { Registry } from '../src/infra/container.js'
+import { Registry } from '../src/infra/Registry.js'
 import { Services } from '../src/infra/Services.js'
 
 let expressApp

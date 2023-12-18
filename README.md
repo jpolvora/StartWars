@@ -27,8 +27,7 @@ Para executar em produção, ajuste as variáveis de ambiente corretamente e uti
 Para rodar os testes, utilize `npm run test`
 
 # Estrutura do projeto
-
-    startwars
+    
     ├── .env.example             # Exemplo de variáveis de ambiente com valores. Deve ser copiado para .env
     ├── package.json             # Pacotes, scripts e definições de projeto
     ├── src
