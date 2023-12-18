@@ -6,7 +6,7 @@ import {
 } from '../routes/index.js'
 
 import swaggerUi from 'swagger-ui-express'
-import swaggerFile from '../swagger-output.json' assert { type: 'json' }
+import { Services } from './Services.js'
 
 export class ExpressAdapter {
   isConfigured = false
@@ -26,7 +26,7 @@ export class ExpressAdapter {
     this.isConfigured = false
   }
 
-  initialize() {
+  async initialize() {
     if (this.isConfigured) return this.app
     this.isConfigured = true
 
@@ -38,7 +38,24 @@ export class ExpressAdapter {
       this.app.use('/api', router)
     }
 
-    this.app.use('/doc', swaggerUi.serve, swaggerUi.setup(swaggerFile))
+    // const env = this.container.get(Services.env)
+    // const isTest = env.NODE_ENV === 'test'
+    // console.log('isTest', isTest)
+    // const swaggerFile = isTest
+    //   ? {}
+    //   : await import('../swagger-output.json', {
+    //       assert: {
+    //         type: 'json',
+    //       },
+    //     })
+
+    const swaggerFile = await import('../swagger-output.json', {
+      assert: {
+        type: 'json',
+      },
+    })
+
+    this.app.use('/doc', swaggerUi.serve, swaggerUi.setup(swaggerFile.default))
 
     return this.app
   }

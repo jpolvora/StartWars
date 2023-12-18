@@ -11,7 +11,7 @@
     "compose:up": "docker compose up",
     "compose:rebuild": "docker compose up --build",
     "compose:down": "docker compose down -v",
-    "start-gendoc": "node src/swagger.js"
+    "gendoc": "node src/swagger.js"
   },
   "keywords": [
     "starwars",
@@ -23,7 +23,7 @@
   "author": {
     "name": "Jone Polvora",
     "email": "jpolvora+git@gmail.com"
-  },  
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/jpolvora/startwars.git"
@@ -42,6 +42,7 @@
     "swagger-ui-express": "^5.0.0"
   },
   "devDependencies": {
+    "@babel/plugin-syntax-import-attributes": "^7.23.3",
     "cross-env": "^7.0.3",
     "jest": "^29.7.0",
     "nodemon": "^3.0.2",

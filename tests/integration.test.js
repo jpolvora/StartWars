@@ -60,7 +60,7 @@ function sleep(ms) {
 
 beforeEach(async () => {
   const api = new ExpressAdapter(container)
-  expressApp = api.initialize()
+  expressApp = await api.initialize()
 })
 
 afterEach(() => {})

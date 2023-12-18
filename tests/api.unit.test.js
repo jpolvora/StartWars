@@ -1,7 +1,7 @@
 import 'dotenv/config'
 import { env } from '../src/config/env.js'
 import { ExpressAdapter } from '../src/infra/ExpressAdapter'
-import { Registry } from '../src/infra/container.js'
+import { Registry } from '../src/infra/Registry.js'
 import { Services } from '../src/infra/Services.js'
 
 describe('unit tests for ExpressAdapter Class', () => {
@@ -46,9 +46,9 @@ describe('unit tests for ExpressAdapter Class', () => {
     })
 
     const api = new ExpressAdapter(container)
-    const a = api.initialize()
-    const b = api.initialize()
-    const c = api.initialize()
+    const a = await api.initialize()
+    const b = await api.initialize()
+    const c = await api.initialize()
 
     expect(a).toBe(b)
     expect(b).toBe(c)

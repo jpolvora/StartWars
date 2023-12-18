@@ -12,9 +12,9 @@ export class HttpServer {
   }
 
   listen() {
-    return new Promise((resolve, reject) => {
+    return new Promise(async (resolve, reject) => {
       try {
-        const app = this.app.initialize()
+        const app = await this.app.initialize()
         const httpServer = http.createServer(app)
         this.#httpServer = httpServer
 
