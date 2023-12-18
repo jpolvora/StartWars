@@ -42,13 +42,13 @@
     async function scheduleImport() {
       //pega o token de autorização
       const responseInitial = await fetch('/api/import')
-      const jsonResponseInitial = await responseInitial.json()
+      const { uuid } = await responseInitial.json()
+      if (!uuid) return alert('token não recebido')
+
       const update = {
-        uuid: jsonResponseInitial.uuid,
+        uuid,
       }
 
-      if (!uuid) return alert("token não recebido");
-      
       const options = {
         method: 'POST',
         headers: {
