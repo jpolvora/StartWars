@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script
+      type="text/javascript"
+      src="https://cdn.jsdelivr.net/npm/handsontable/dist/handsontable.full.min.js"
+    ></script>
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/handsontable/dist/handsontable.full.min.css"
+    />
+    <title>Document</title>
+  </head>
+  <body>
+    <div id="example"></div>
+  </body>
+  <script>
+    function render(data) {
+      const container = document.querySelector('#example')
+      const hot = new Handsontable(container, {
+        colHeaders: ['Id', 'Nome', 'Altura', 'Gênero'],
+        data,        
+        licenseKey: 'non-commercial-and-evaluation', // for non-commercial use only
+      })
+
+      console.log(
+        `Handsontable: v${Handsontable.version} (${Handsontable.buildDate})`
+      )
+    }
+
+    async function fetchData() {
+      const response = await fetch('/api/personagens')
+      const personagens = await response.json()
+      if (personagens.success) return personagens.data
+      return []
+    }
+
+    document.addEventListener('DOMContentLoaded', async () => {
+      console.log('loaded')
+      const data = await fetchData()
+      render(data)
+    })
+  </script>
+</html>

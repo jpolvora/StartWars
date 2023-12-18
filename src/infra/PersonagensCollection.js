@@ -10,9 +10,19 @@ export class PersonagensCollection {
 
   async getAll() {
     const result = []
-    const cursor = this.personagens.find({}).sort({ nome: 1 })
+    const projection = { _id: 1, nome: 1, altura: 1, genero: 1 }
+
+    const cursor = this.personagens
+      .find({})
+      .project(projection)
+      .sort({ nome: 1 })
     for await (const doc of cursor) {
-      result.push(doc)
+      result.push({
+        id: doc._id,
+        nome: doc.nome,
+        altura: doc.altura,
+        genero: doc.genero,
+      })
     }
 
     return result

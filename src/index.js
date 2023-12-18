@@ -32,7 +32,7 @@ async function start() {
   const server = new HttpServer(new ExpressAdapter(container), env.PORT)
 
   try {
-    const retryOptions = { retries: 10, retryIntervalMs: 1000 }
+    const retryOptions = { retries: 9, retryIntervalMs: 1000 }
 
     await Promise.all[
       (retry(() => server.listen(), retryOptions),

@@ -29,6 +29,9 @@ services:
     links: 
         - rabbitmq
         - mongodb
+    # profiles:
+    #   - donotstart
+
 
   rabbitmq:
     image: "rabbitmq:3.8-management-alpine"

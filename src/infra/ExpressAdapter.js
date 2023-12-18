@@ -14,6 +14,7 @@ export class ExpressAdapter {
     const app = express()
 
     //place here all needed middlewares
+    app.use(express.static('public'))
     app.use(express.json())
 
     this.app = app
