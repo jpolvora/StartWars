@@ -10,16 +10,24 @@
     "dev": "nodemon ./src/index.js  --watch .env --watch ./src",
     "compose:up": "docker compose up",
     "compose:rebuild": "docker compose up --build",
-    "compose:down": "docker compose down -v"
+    "compose:down": "docker compose down -v",
+    "start-gendoc": "node src/swagger.js"
   },
   "keywords": [
     "starwars",
     "swapi"
   ],
   "engines": {
-    "node": "20.x"
+    "node": "20.9.0"
   },
-  "author": "Jone Polvora",
+  "author": {
+    "name": "Jone Polvora",
+    "email": "jpolvora+git@gmail.com"
+  },  
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jpolvora/startwars.git"
+  },
   "license": "MIT",
   "dependencies": {
     "amqplib": "^0.10.3",
@@ -29,7 +37,9 @@
     "envalid": "^8.0.0",
     "express": "^4.18.2",
     "http-graceful-shutdown": "^3.1.13",
-    "mongodb": "^6.3.0"
+    "mongodb": "^6.3.0",
+    "swagger-autogen": "^2.23.7",
+    "swagger-ui-express": "^5.0.0"
   },
   "devDependencies": {
     "cross-env": "^7.0.3",

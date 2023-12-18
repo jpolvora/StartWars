@@ -23,7 +23,7 @@
 
     Para rodar os testes, utilize `npm run test`
 
-* Acessando os dados
+* Acessando o frontend
     
     Durante a execução do projeto, abra o browser em `http://localhost:3000` e a tela de listagem irá se apresentar.
     Inicialmente a tela mostrará um grid vazio.
@@ -32,6 +32,10 @@
     Após alguns segundos, aperte F5 no navegador para acompanhar os dados sendo populados.
 
     Obs: No projeto há um arquivo `teste.http` que contém os endpoints a serem executados pelo plugin `Rest Client` do VSCODE.
+
+* Swagger
+  
+    O projeto contém documentação gerada automaticamente pelo Swagger, acessível via `/doc`
 
 ### API's disponíveis
 
@@ -44,3 +48,7 @@
 `GET /api/personagens/{id}`: Mostrará somente o personagem com o `id` informado.
 
 ### Estrutura do projeto
+
+    O projeto foi escrito em NodeJS 20, consituído de:
+    -   Um endpoint que retorna um frontend escrito em .html
+    -   Endpoints para interação com API Rest

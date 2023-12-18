@@ -5,6 +5,9 @@ import {
   addPersonagensRoutes,
 } from '../routes/index.js'
 
+import swaggerUi from 'swagger-ui-express'
+import swaggerFile from '../swagger-output.json' assert { type: 'json' }
+
 export class ExpressAdapter {
   isConfigured = false
 
@@ -14,6 +17,7 @@ export class ExpressAdapter {
     const app = express()
 
     //place here all needed middlewares
+
     app.use(express.static('public'))
     app.use(express.json())
 
@@ -33,6 +37,8 @@ export class ExpressAdapter {
       useRoute(router, this.container)
       this.app.use('/api', router)
     }
+
+    this.app.use('/doc', swaggerUi.serve, swaggerUi.setup(swaggerFile))
 
     return this.app
   }
