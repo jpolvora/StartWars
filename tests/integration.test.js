@@ -19,6 +19,9 @@ container.set(Services.amqp, {
 
 container.set(Services.personagens, {
   getById: async (id) => {
+    if (id === 99) {
+      return undefined
+    }
     await sleep(100)
     return {
       id,
@@ -131,6 +134,13 @@ describe('unit tests for ENDPOINTS', () => {
   it('it should return 404 on invalid personagem id', async () => {
     const sut = expressApp
     const response = await request(sut).get('/api/personagens/undefined')
+
+    expect(response.statusCode).toBe(404)
+  })
+
+  it('it should return 404 on invalid personagem id', async () => {
+    const sut = expressApp
+    const response = await request(sut).get('/api/personagens/99')
 
     expect(response.statusCode).toBe(404)
   })

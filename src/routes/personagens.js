@@ -25,8 +25,12 @@ export function addPersonagensRoutes(router, container) {
       const useCase = new GetByIdUseCase(personagens)
       const result = await useCase.execute(id)
 
+      if (!result) {
+        return res.status(404).end()
+      }
+
       return res.json({
-        success: true,
+        success: !!result,
         data: result,
       })
     }

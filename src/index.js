@@ -18,8 +18,8 @@ async function start() {
   const container = Registry.instance
   container.set(Services.env, env)
   container.set(Services.httpClient, new Axios({ baseURL: env.API_URL }))
-
-  const mongoDbAdapter = new MongoDbAdapter(env.MONGODB_URI, 'startwars')
+  const databaseName = 'startwars'
+  const mongoDbAdapter = new MongoDbAdapter(env.MONGODB_URI, databaseName)
 
   container.set(
     Services.personagens,
