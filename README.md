@@ -63,7 +63,7 @@
     
 
 ### Overview of design and patterns
-
+  - Ports and Adapters Architecture ( Hexagonal )
   - [Twelve Factor](https://en.wikipedia.org/wiki/Twelve-Factor_App_methodology)
   - Clean Code
     - Separation of Concerns (SOC)

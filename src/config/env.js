@@ -1,4 +1,4 @@
-import { cleanEnv, str, num } from 'envalid'
+import { cleanEnv, str, num, bool } from 'envalid'
 
 export const env = cleanEnv(process.env, {
   PORT: num(),
@@ -6,4 +6,5 @@ export const env = cleanEnv(process.env, {
   AMQP_URL: str(),
   MONGODB_URI: str(),
   API_URL: str(),
+  ENABLE_SWAGGER: bool(),
 })

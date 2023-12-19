@@ -19,6 +19,7 @@ services:
       AMQP_URL: amqp://admin:admin@rabbitmq:5672
       MONGODB_URI: mongodb://user:pass@mongodb
       API_URL: https://swapi.dev/api
+      ENABLE_SWAGGER: true
     ports:
       - 3000:3000
     depends_on:

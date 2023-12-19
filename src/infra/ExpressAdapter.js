@@ -38,8 +38,8 @@ export class ExpressAdapter {
       this.app.use('/api', router)
     }
 
-    // const env = this.container.get(Services.env)
-    // const isTest = env.NODE_ENV === 'test'
+    const env = this.container.get(Services.env)
+    const enableSwagger = !!env.ENABLE_SWAGGER
     // console.log('isTest', isTest)
     // const swaggerFile = isTest
     //   ? {}
@@ -49,13 +49,20 @@ export class ExpressAdapter {
     //       },
     //     })
 
-    const swaggerFile = await import('../swagger-output.json', {
-      assert: {
-        type: 'json',
-      },
-    })
+    //FEATURE FLAG
+    if (enableSwagger) {
+      const swaggerFile = await import('../swagger-output.json', {
+        assert: {
+          type: 'json',
+        },
+      })
 
-    this.app.use('/doc', swaggerUi.serve, swaggerUi.setup(swaggerFile.default))
+      this.app.use(
+        '/doc',
+        swaggerUi.serve,
+        swaggerUi.setup(swaggerFile.default)
+      )
+    }
 
     return this.app
   }
