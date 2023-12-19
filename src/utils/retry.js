@@ -1,3 +1,4 @@
+import { sleep } from './sleep.js'
 /**
  * Runs the function `fn`
  * and retries automatically if it fails.
@@ -18,5 +19,3 @@ export const retry = async (fn, { retries, retryIntervalMs }) => {
     return retry(fn, { retries: retries - 1, retryIntervalMs })
   }
 }
-
-const sleep = (ms = 0) => new Promise((resolve) => setTimeout(resolve, ms))

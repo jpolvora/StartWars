@@ -1,9 +1,5 @@
 import express from 'express'
-import {
-  addIndexRoutes,
-  addImportRoutes,
-  addPersonagensRoutes,
-} from '../routes/index.js'
+import { addImportRoutes, addPersonagensRoutes } from '../routes/index.js'
 
 import swaggerUi from 'swagger-ui-express'
 import { Services } from './Services.js'
@@ -30,7 +26,7 @@ export class ExpressAdapter {
     if (this.isConfigured) return this.app
     this.isConfigured = true
 
-    const routes = [addIndexRoutes, addImportRoutes, addPersonagensRoutes]
+    const routes = [addImportRoutes, addPersonagensRoutes]
 
     for (const useRoute of routes) {
       const router = express.Router()

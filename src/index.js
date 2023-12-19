@@ -60,10 +60,11 @@ start().catch(console.error.bind(console))
 
 //todo:
 /*
- * chamar a api e capturar os dados, em loop, paginando //OK
- * gravar em bulk insert //ok
- * criar use case de listagem
- * criar docker-compose ok
- * melhorar testes
- * refatoracao container
+ * chamar a api e capturar os dados, em loop, paginando OK
+ * gravar em bulk insert OK
+ * criar use case de listagem OK
+ * criar docker-compose OK
+ * melhorar testes //cobrir 100%
+ * swagger OK
+ * refatoracao container OK - melhorar através de proxy
  */
