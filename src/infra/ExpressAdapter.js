@@ -5,10 +5,17 @@ import swaggerUi from 'swagger-ui-express'
 import { Services } from './Services.js'
 
 export class ExpressAdapter {
-  isConfigured = false
+  #container = null
+  #isConfigured = false
+  #app = null
 
   constructor(container) {
-    this.container = container
+    this.#container = container
+  }
+
+  async initialize() {
+    if (this.#isConfigured) return this.#app
+    this.#isConfigured = true
 
     const app = express()
 
@@ -17,33 +24,8 @@ export class ExpressAdapter {
     app.use(express.static('public'))
     app.use(express.json())
 
-    this.app = app
-
-    this.isConfigured = false
-  }
-
-  async initialize() {
-    if (this.isConfigured) return this.app
-    this.isConfigured = true
-
-    const routes = [addImportRoutes, addPersonagensRoutes]
-
-    for (const useRoute of routes) {
-      const router = express.Router()
-      useRoute(router, this.container)
-      this.app.use('/api', router)
-    }
-
-    const env = this.container.get(Services.env)
+    const env = this.#container.get(Services.env)
     const enableSwagger = !!env.ENABLE_SWAGGER
-    // console.log('isTest', isTest)
-    // const swaggerFile = isTest
-    //   ? {}
-    //   : await import('../swagger-output.json', {
-    //       assert: {
-    //         type: 'json',
-    //       },
-    //     })
 
     //FEATURE FLAG
     if (enableSwagger) {
@@ -53,13 +35,19 @@ export class ExpressAdapter {
         },
       })
 
-      this.app.use(
-        '/doc',
-        swaggerUi.serve,
-        swaggerUi.setup(swaggerFile.default)
-      )
+      app.use('/doc', swaggerUi.serve, swaggerUi.setup(swaggerFile.default))
     }
 
-    return this.app
+    //import all routes here
+    const routes = [addImportRoutes, addPersonagensRoutes]
+
+    for (const addRoute of routes) {
+      const router = express.Router()
+      addRoute(router, this.#container)
+      app.use('/api', router)
+    }
+
+    this.#app = app
+    return app
   }
 }

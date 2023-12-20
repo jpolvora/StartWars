@@ -31,6 +31,9 @@ async function start() {
   container.set(Services.amqp, amqp)
   const server = new HttpServer(new ExpressAdapter(container), env.PORT)
 
+  //protect services overriding
+  container.build()
+
   try {
     const retryOptions = { retries: 9, retryIntervalMs: 1000 }
 

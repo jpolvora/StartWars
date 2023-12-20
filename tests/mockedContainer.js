@@ -51,5 +51,5 @@ export function getContainer(mergeVars) {
     },
   })
 
-  return container
+  return container.build()
 }
