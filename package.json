@@ -6,7 +6,7 @@
   "type": "module",
   "scripts": {
     "test:coverage": "cross-env NODE_ENV=test NODE_OPTIONS=--experimental-vm-modules jest --no-cache --passWithNoTests --detectOpenHandles --verbose --coverage --forceExit",
-    "test": "cross-env NODE_ENV=test NODE_OPTIONS=--experimental-vm-modules jest --no-cache --passWithNoTests --runInBand --detectOpenHandles --verbose",
+    "test": "cross-env NODE_ENV=test NODE_OPTIONS=--experimental-vm-modules jest --no-cache --passWithNoTests --runInBand --detectOpenHandles --verbose --forceExit",
     "start": "node src/index.js",
     "dev": "nodemon ./src/index.js  --watch .env --watch ./src",
     "compose:up": "docker compose up",

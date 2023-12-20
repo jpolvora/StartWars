@@ -1,5 +1,4 @@
 import { Events } from '../../infra/Events.js'
-import { PersonagensCollection } from '../../infra/PersonagensCollection.js'
 
 /**
  * Executes a scheduled import Job
@@ -33,7 +32,7 @@ export class ExecuteImportUseCase {
       return person
     }
 
-    console.log(`executing import: ${msg.next}`)
+    console.log(`executing import: ${msg}`)
     try {
       const response = await this.httpClient.get(msg.next)
       const data = JSON.parse(response.data)

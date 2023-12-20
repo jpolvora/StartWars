@@ -1,5 +1,5 @@
 import 'dotenv/config'
-import { ExpressAdapter, HttpServer, Registry } from '../src/infra'
+import { ExpressAdapter, HttpServer } from '../src/infra'
 import { getContainer } from './mockedContainer.js'
 
 describe('HttpServer instance Unit tests', () => {

@@ -11,6 +11,34 @@ export function getContainer(mergeVars) {
     ...valuesToMerge,
   })
 
+  container.set(Services.queue, {
+    publish: async (queueName, data) => {
+      await sleep(1000)
+    },
+  })
+
+  container.set(Services.httpClient, {
+    get: async (url) => {
+      await sleep(1000)
+      return {
+        data: JSON.stringify({
+          results: [
+            {
+              url: '/people/1',
+              name: 'john doe',
+              height: 180,
+              gender: 'male',
+            },
+          ],
+        }),
+      }
+    },
+    post: async (url, data) => {
+      await sleep(1000)
+      return true
+    },
+  })
+
   container.set(Services.amqp, {
     connect: () => {},
     publish: () => {},
@@ -48,6 +76,11 @@ export function getContainer(mergeVars) {
           peso: 110,
         },
       ]
+    },
+
+    saveAllAsync: async () => {
+      await sleep(1000)
+      return true
     },
   })
 
