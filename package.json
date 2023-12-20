@@ -5,7 +5,7 @@
   "main": "src/index.js",
   "type": "module",
   "scripts": {
-    "test:coverage": "cross-env NODE_ENV=test NODE_OPTIONS=--experimental-vm-modules jest --no-cache --passWithNoTests --runInBand --detectOpenHandles --verbose --coverage --forceExit",
+    "test:coverage": "cross-env NODE_ENV=test NODE_OPTIONS=--experimental-vm-modules jest --no-cache --passWithNoTests --detectOpenHandles --verbose --coverage --forceExit",
     "test": "cross-env NODE_ENV=test NODE_OPTIONS=--experimental-vm-modules jest --no-cache --passWithNoTests --runInBand --detectOpenHandles --verbose",
     "start": "node src/index.js",
     "dev": "nodemon ./src/index.js  --watch .env --watch ./src",
