@@ -54,7 +54,7 @@ export function getContainer(mergeVars) {
       await sleep(100)
       return {
         id,
-        nome: 'fake' + id,
+        nome: `fake${id}`,
         altura: 100,
         peso: 100,
       }
