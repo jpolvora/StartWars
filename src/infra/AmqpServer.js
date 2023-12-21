@@ -1,37 +1,46 @@
 import { ExecuteImportUseCase } from '../application/useCases/ExecuteImportUseCase.js'
+import { ImportFinishedUseCase } from '../application/useCases/ImportFinishedUseCase.js'
 import { Events } from './Events.js'
 import { adaptQueueMessageToUseCaseExecution } from './QueueUseCaseAdapter.js'
 import { Services } from './Services.js'
 
 export class AmqpServer {
-  constructor(container) {
-    this.queue = container.get(Services.queue)
-    // this.httpClient = container.get(Services.httpClient)
-    // this.personagens = container.get(Services.personagens)
-
+  constructor(client, container) {
+    this.client = client
     this.container = container
   }
 
   async listen() {
-    await this.queue.connect()
+    await this.client.connect()
 
-    this.queue.consume(
-      Events.importScheduled,
-      adaptQueueMessageToUseCaseExecution(this.container, ExecuteImportUseCase),
-    )
+    this.subscribe([
+      {
+        event: Events.importScheduled,
+        useCase: ExecuteImportUseCase,
+      },
+      {
+        event: Events.importFinished,
+        useCase: ImportFinishedUseCase,
+      },
+    ])
+  }
 
-    this.queue.consume(Events.importFinished, async () => {
-      console.log(Events.importFinished)
-    })
+  async subscribe(consumers) {
+    for (const consumer of consumers) {
+      this.client.consume(
+        consumer.event,
+        adaptQueueMessageToUseCaseExecution(this.container, consumer.useCase),
+      )
+    }
   }
 
   async publish(event, data) {
-    await this.queue.connect()
-    await this.queue.publish(event, data)
+    await this.client.connect()
+    await this.client.publish(event, data)
   }
 
   async close() {
-    await this.queue.disconnect()
+    await this.client.disconnect()
     console.log('gracefully shutdown amqp connection')
   }
 }

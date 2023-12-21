@@ -89,7 +89,9 @@
   - REST
 
 #### Design Patterns
-
+  - Template Method
+  - Adapter
+  - Table Gateway
 ### Technologies
   - NodeJS 20
   - MongoDB

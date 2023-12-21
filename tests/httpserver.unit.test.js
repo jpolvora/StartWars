@@ -4,7 +4,8 @@ import { getContainer } from './mockedContainer.js'
 
 describe('HttpServer instance Unit tests', () => {
   it('should assert injected constructor properties', () => {
-    const app = new ExpressAdapter(getContainer())
+    const container = getContainer()
+    const app = new ExpressAdapter(container)
     const sut = new HttpServer(app, 3001)
 
     expect(sut.app).toBe(app)

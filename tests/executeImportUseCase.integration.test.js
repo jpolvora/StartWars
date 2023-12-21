@@ -1,7 +1,6 @@
 import 'dotenv/config'
 import { getContainer } from './mockedContainer.js'
 import { ExecuteImportUseCase } from '../src/application/useCases/ExecuteImportUseCase.js'
-import { Services } from '../src/infra/Services.js'
 import { randomUUID } from 'crypto'
 
 describe('ExecuteImportUseCase Integration Tests', () => {

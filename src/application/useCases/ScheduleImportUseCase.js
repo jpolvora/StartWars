@@ -6,7 +6,7 @@ import { Services } from '../../infra/Services.js'
  */
 export class ScheduleImportUseCase {
   constructor(container) {
-    this.queue = container.get(Services.amqp)
+    this.queue = container.get(Services.queue)
     const env = container.get(Services.env)
     const initialUrl = `${env.API_URL}/people`
     this.initialUrl = initialUrl

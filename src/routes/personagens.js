@@ -3,7 +3,7 @@ import { GetByIdUseCase } from '../application/useCases/GetByIdUseCase.js'
 import { Services } from '../infra/Services.js'
 
 export function addPersonagensRoutes(router, container) {
-  const personagens = container.get(Services.personagens)
+  const personagens = container.get(Services.db).getPersonagens()
 
   router.get('/personagens', async (req, res) => {
     const useCase = new GetAllUseCase(personagens)

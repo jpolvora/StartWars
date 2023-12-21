@@ -5,18 +5,19 @@ const serverDebug = debug('server')
 export class HttpServer {
   #httpServer
   #listening = false
+  #app = null
 
   constructor(app, port) {
-    this.app = app
+    this.#app = app
     this.port = port
   }
 
   listen() {
-    return new Promise(async (resolve, reject) => {
-      if (this.#listening) return resolve(this.httpServer)
-      this.#listening = true
-      try {
-        const app = await this.app.initialize()
+    return new Promise((resolve, reject) => {
+      return this.#app.initialize().then((app) => {
+        if (this.#listening) return resolve(this.httpServer)
+        this.#listening = true
+
         const httpServer = http.createServer(app)
         this.#httpServer = httpServer
 
@@ -34,14 +35,15 @@ export class HttpServer {
         })
 
         return httpServer.listen(this.port)
-      } catch (e) {
-        serverDebug('Erro ao tentar iniciar o servidor http: ' + e)
-        throw e
-      }
+      })
     })
   }
 
   get httpServer() {
     return this.#httpServer
+  }
+
+  get app() {
+    return this.#app
   }
 }

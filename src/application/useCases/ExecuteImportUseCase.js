@@ -9,7 +9,7 @@ export class ExecuteImportUseCase {
   constructor(container) {
     this.queue = container.get(Services.queue)
     this.httpClient = container.get(Services.httpClient)
-    this.personagens = container.get(Services.personagens)
+    this.personagens = container.get(Services.db).getPersonagens()
   }
 
   async execute(msg) {

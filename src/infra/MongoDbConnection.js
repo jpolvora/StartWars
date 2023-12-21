@@ -1,4 +1,5 @@
 import { MongoClient } from 'mongodb'
+import { PersonagensCollection } from './PersonagensCollection.js'
 
 export class MongoDbAdapter {
   constructor(uri, dbName) {
@@ -13,7 +14,7 @@ export class MongoDbAdapter {
       await this.db.command({ ping: 1 })
       console.log('Connected to mongodb')
     } catch (e) {
-      console.error('Erro ao conectar no banco de dados: ' + e)
+      console.error('Erro ao conectar no banco de dados: ', e)
       throw e
     }
   }
@@ -23,7 +24,7 @@ export class MongoDbAdapter {
     console.log('gracefully shutdown mongodb connection')
   }
 
-  getDb() {
-    return this.db
+  getPersonagens() {
+    return new PersonagensCollection(this.db)
   }
 }

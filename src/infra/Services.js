@@ -1,7 +1,6 @@
 export const Services = {
   env: 'env',
   httpClient: 'httpClient',
-  personagens: 'personagens',
+  db: 'db',
   queue: 'queue',
-  amqp: 'amqp',
 }

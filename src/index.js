@@ -8,66 +8,42 @@ import {
   configureGracefulShutdown,
   MongoDbAdapter,
   RabbitMQAdapter,
-  PersonagensCollection,
   Registry,
   Services,
 } from './infra/index.js'
 import { retry } from './utils/index.js'
 
 async function start() {
-  const container = Registry.instance
-  container.set(Services.env, env)
-  container.set(Services.httpClient, new Axios({ baseURL: env.API_URL }))
-  const databaseName = 'startwars'
-  const mongoDbAdapter = new MongoDbAdapter(env.MONGODB_URI, databaseName)
-
-  container.set(
-    Services.personagens,
-    new PersonagensCollection(mongoDbAdapter.db)
-  )
-
-  container.set(Services.queue, new RabbitMQAdapter(env.AMQP_URL))
-  const amqp = new AmqpServer(container)
-  container.set(Services.amqp, amqp)
-  const server = new HttpServer(new ExpressAdapter(container), env.PORT)
-
-  //protect services overriding
-  container.build()
-
   try {
+    const container = new Registry()
+    container
+      .set(Services.env, env)
+      .set(Services.httpClient, new Axios({ baseURL: env.API_URL }))
+      .set(Services.db, new MongoDbAdapter(env.MONGODB_URI, env.MONGODB_DBNAME))
+      .set(Services.queue, new AmqpServer(new RabbitMQAdapter(env.AMQP_URL), container))
+      .build()
+
+    const server = new HttpServer(new ExpressAdapter(container), env.PORT)
+
     const retryOptions = { retries: 9, retryIntervalMs: 1000 }
 
-    //await all promises in parallel
+    const amqpPromise = retry(() => container.get(Services.queue).listen(), retryOptions)
+    const mongoDbPromise = retry(() => container.get(Services.db).connect(), retryOptions)
     const serverPromise = retry(() => server.listen(), retryOptions)
-    const amqpPromise = retry(() => amqp.listen(), retryOptions)
-    const mongoDbPromise = retry(() => mongoDbAdapter.connect(), retryOptions)
 
+    //await all promises in parallel
     await Promise.all([serverPromise, amqpPromise, mongoDbPromise])
 
     console.log('all services connected successfully')
 
-    server.shutDownFn = configureGracefulShutdown(
-      server.httpServer,
-      env.NODE_ENV,
-      async (signal) => {
-        await mongoDbAdapter.disconnect()
-        await amqp.close()
-      }
-    )
+    return configureGracefulShutdown(server.httpServer, env.NODE_ENV, async (_signal) => {
+      await container.get(Services.db).disconnect()
+      await container.get(Services.queue).close()
+      await server.httpServer.close()
+    })
   } catch (e) {
-    throw new Error(`error on trying to run Application: ${e}`)
+    throw new Error('error on trying to run Application: ', e)
   }
 }
 
 start().catch(console.error.bind(console))
-
-//todo:
-/*
- * chamar a api e capturar os dados, em loop, paginando OK
- * gravar em bulk insert OK
- * criar use case de listagem OK
- * criar docker-compose OK
- * melhorar testes //cobrir 100%
- * swagger OK
- * refatoracao container OK - melhorar através de proxy
- */

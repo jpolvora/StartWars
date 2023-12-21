@@ -14,7 +14,7 @@ export class ExpressAdapter {
   }
 
   async initialize() {
-    if (this.#isConfigured) return this.#app
+    if (this.#isConfigured && this.#app) return this.#app
     this.#isConfigured = true
 
     const app = express()
