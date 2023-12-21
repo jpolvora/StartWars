@@ -7,10 +7,7 @@ import { randomUUID } from 'crypto'
 describe('ExecuteImportUseCase Integration Tests', () => {
   it('should execute import', async () => {
     const container = getContainer()
-    const httpClient = container.get(Services.httpClient)
-    const queue = container.get(Services.queue)
-    const personagens = container.get(Services.personagens)
-    const sut = new ExecuteImportUseCase(queue, httpClient, personagens)
+    const sut = new ExecuteImportUseCase(container)
     const output = await sut.execute({
       next: 'next-url',
       uuid: randomUUID(),
@@ -21,10 +18,7 @@ describe('ExecuteImportUseCase Integration Tests', () => {
 
   it('should execute use case but not import', async () => {
     const container = getContainer()
-    const httpClient = container.get(Services.httpClient)
-    const queue = container.get(Services.queue)
-    const personagens = container.get(Services.personagens)
-    const sut = new ExecuteImportUseCase(queue, httpClient, personagens)
+    const sut = new ExecuteImportUseCase(container)
     const output = await sut.execute({
       next: false,
       uuid: randomUUID(),

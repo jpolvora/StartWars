@@ -1,14 +1,15 @@
 import { Events } from '../../infra/Events.js'
+import { Services } from '../../infra/Services.js'
 
 /**
  * Executes a scheduled import Job
  */
 
 export class ExecuteImportUseCase {
-  constructor(queue, httpClient, personagens) {
-    this.queue = queue
-    this.httpClient = httpClient
-    this.personagens = personagens
+  constructor(container) {
+    this.queue = container.get(Services.queue)
+    this.httpClient = container.get(Services.httpClient)
+    this.personagens = container.get(Services.personagens)
   }
 
   async execute(msg) {

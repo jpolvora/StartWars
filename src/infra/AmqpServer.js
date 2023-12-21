@@ -1,25 +1,24 @@
 import { ExecuteImportUseCase } from '../application/useCases/ExecuteImportUseCase.js'
 import { Events } from './Events.js'
+import { adaptQueueMessageToUseCaseExecution } from './QueueUseCaseAdapter.js'
 import { Services } from './Services.js'
 
 export class AmqpServer {
   constructor(container) {
     this.queue = container.get(Services.queue)
-    this.httpClient = container.get(Services.httpClient)
-    this.personagens = container.get(Services.personagens)
+    // this.httpClient = container.get(Services.httpClient)
+    // this.personagens = container.get(Services.personagens)
+
+    this.container = container
   }
 
   async listen() {
     await this.queue.connect()
 
-    this.queue.consume(Events.importScheduled, async (msg) => {
-      const useCase = new ExecuteImportUseCase(
-        this.queue,
-        this.httpClient,
-        this.personagens
-      )
-      await useCase.execute(msg)
-    })
+    this.queue.consume(
+      Events.importScheduled,
+      adaptQueueMessageToUseCaseExecution(this.container, ExecuteImportUseCase),
+    )
 
     this.queue.consume(Events.importFinished, async () => {
       console.log(Events.importFinished)
