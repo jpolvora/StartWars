@@ -32,7 +32,7 @@ export class ExecuteImportUseCase {
       return person
     }
 
-    console.log(`executing import: ${msg}`)
+    console.log('executing import: %o', msg)
     try {
       const response = await this.httpClient.get(msg.next)
       const data = JSON.parse(response.data)
