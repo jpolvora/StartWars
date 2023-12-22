@@ -2,6 +2,7 @@ import 'dotenv/config.js'
 import cluster from 'node:cluster'
 import { env } from './config/env.js'
 import { Axios } from 'axios'
+import { Application } from './Application.js'
 import {
   AmqpServer,
   ExpressAdapter,
@@ -10,14 +11,15 @@ import {
   RabbitMQAdapter,
   Registry,
   Services,
+  ConsoleLogger,
 } from './infra/index.js'
-import { ConsoleLogger } from './infra/ConsoleLogger.js'
-import { Application } from './Application.js'
 
 const workerCount = env.WORKERS || 2
 const autoRestart = env.AUTORESTART
+const isPrimary = workerCount > 1 && cluster.isPrimary
+const isWorker = !cluster.isPrimary || workerCount < 2
 
-if (workerCount > 1 && cluster.isPrimary) {
+if (isPrimary) {
   console.log(`Primary process ${process.pid} is running`)
 
   for (let i = 0; i < workerCount; i++) {
@@ -28,7 +30,10 @@ if (workerCount > 1 && cluster.isPrimary) {
     console.log(`Worker process ${worker.process.pid} died. Restarting...`)
     if (autoRestart) cluster.fork()
   })
-} else {
+}
+
+if (isWorker) {
+  console.log(`Worker process ${cluster.worker?.id || process.pid} is running`)
   const container = new Registry()
   container
     .set(Services.env, env)

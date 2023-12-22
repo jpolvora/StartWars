@@ -34,7 +34,7 @@ export class ExecuteImportUseCase {
       return person
     }
 
-    console.log('[%s] executing import: %o', cluster.worker?.id, msg)
+    console.log('[%s] executing import: %o', cluster.worker?.id || process.pid, msg)
     try {
       const response = await this.httpClient.get(msg.next)
       const data = JSON.parse(response.data)
