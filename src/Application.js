@@ -9,7 +9,7 @@ export class Application {
     this.#container = container
   }
 
-  async run() {
+  run = async () => {
     try {
       const retryOptions = { retries: 9, retryIntervalMs: 1000 }
 
@@ -23,13 +23,13 @@ export class Application {
 
       console.log('all services connected successfully')
 
-      configureGracefulShutdown(server.httpServer, env.NODE_ENV, this.onShutdown.bind(this))
+      configureGracefulShutdown(server.httpServer, env.NODE_ENV, this.onShutdown)
     } catch (e) {
       throw new Error('error on trying to run Application: ', e)
     }
   }
 
-  async onShutdown(signal) {
+  onShutdown = async (signal) => {
     console.info('app async shutdow via signal: ', signal)
     await this.#container.get(Services.db).disconnect()
     await this.#container.get(Services.queue).close()
