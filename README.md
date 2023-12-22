@@ -1,5 +1,7 @@
 # StartWars
 
+Link para visualizar projeto rodando no Azure (WebApp): [StartWars](https://startwars.azurewebsites.net)
+
 ### Instruções para executar
 
 * Requisitos para executar via `docker compose`
