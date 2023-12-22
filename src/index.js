@@ -22,8 +22,11 @@ const isWorker = !cluster.isPrimary || workerCount < 2
 if (isPrimary) {
   console.log(`Primary process ${process.pid} is running`)
 
+  const workers = []
+
   for (let i = 0; i < workerCount; i++) {
-    cluster.fork()
+    const worker = cluster.fork()
+    workers.push(worker)
   }
 
   cluster.on('exit', (worker, code, signal) => {

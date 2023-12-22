@@ -45,7 +45,8 @@ export class AmqpServer {
     try {
       await this.client.publish(event, data)
     } catch (e) {
-      console.error('Error trying to publish message to queue: ', e)
+      console.error('Error trying to publish message to queue: %o ', e)
+      throw e
     }
   }
 

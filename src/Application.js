@@ -25,7 +25,7 @@ export class Application {
 
       configureGracefulShutdown(server.httpServer, env.NODE_ENV, this.onShutdown)
     } catch (e) {
-      throw new Error('error on trying to run Application: ', e)
+      throw new Error(`error on trying to run Application: ${e}`)
     }
   }
 

@@ -19,7 +19,7 @@
   },
   "keywords": ["starwars", "swapi"],
   "engines": {
-    "node": "20.9.0"
+    "node": "20.x"
   },
   "author": {
     "name": "Jone Polvora",
