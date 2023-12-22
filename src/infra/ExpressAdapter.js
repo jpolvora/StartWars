@@ -22,17 +22,8 @@ export class ExpressAdapter {
     const app = express()
 
     //place here all needed middlewares
-    app.use(helmet())
-    app.use(
-      cors({
-        origin: '*',
-        methods: ['GET', 'POST', 'DELETE', 'UPDATE', 'PUT', 'PATCH'],
-        credentials: true,
-        allowedHeaders: '*',
-      }),
-    )
+
     app.use(express.static('public'))
-    app.use(express.json())
 
     const env = this.#container.get(Services.env)
     const enableSwagger = !!env.ENABLE_SWAGGER
@@ -54,14 +45,14 @@ export class ExpressAdapter {
     for (const addRoute of routes) {
       const router = express.Router()
       addRoute(router, this.#container)
-      app.use('/api', router)
+      app.use('/api', express.json(), helmet(), cors(), router)
     }
 
     // app.use((req, res, next) => {
     //   res.status(404).send("Sorry can't find that!")
     // })
 
-    // // custom error handler
+    // custom error handler
     // app.use((err, req, res, next) => {
     //   console.error(err.stack)
     //   res.status(500).send('Something broke!')
