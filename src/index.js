@@ -1,59 +1,43 @@
 import 'dotenv/config.js'
+import cluster from 'node:cluster'
 import { env } from './config/env.js'
 import { Axios } from 'axios'
 import {
   AmqpServer,
   ExpressAdapter,
   HttpServer,
-  configureGracefulShutdown,
   MongoDbAdapter,
   RabbitMQAdapter,
   Registry,
   Services,
 } from './infra/index.js'
-import { retry } from './utils/index.js'
+import { ConsoleLogger } from './infra/ConsoleLogger.js'
+import { Application } from './Application.js'
 
-class Application {
-  #container
+const workerCount = env.WORKERS || 2
+const autoRestart = env.AUTORESTART
 
-  constructor() {
-    const container = new Registry()
-    this.#container = container
+if (workerCount > 1 && cluster.isPrimary) {
+  console.log(`Primary process ${process.pid} is running`)
 
-    container
-      .set(Services.env, env)
-      .set(Services.httpClient, new Axios({ baseURL: env.API_URL }))
-      .set(Services.db, new MongoDbAdapter(env.MONGODB_URI, env.MONGODB_DBNAME))
-      .set(Services.queue, new AmqpServer(new RabbitMQAdapter(env.AMQP_URL), container))
-      .set(Services.server, new HttpServer(new ExpressAdapter(container), env.PORT))
-      .build()
+  for (let i = 0; i < workerCount; i++) {
+    cluster.fork()
   }
 
-  async run() {
-    try {
-      const retryOptions = { retries: 9, retryIntervalMs: 1000 }
+  cluster.on('exit', (worker, code, signal) => {
+    console.log(`Worker process ${worker.process.pid} died. Restarting...`)
+    if (autoRestart) cluster.fork()
+  })
+} else {
+  const container = new Registry()
+  container
+    .set(Services.env, env)
+    .set(Services.httpClient, new Axios({ baseURL: env.API_URL }))
+    .set(Services.db, new MongoDbAdapter(env.MONGODB_URI, env.MONGODB_DBNAME))
+    .set(Services.queue, new AmqpServer(new RabbitMQAdapter(env.AMQP_URL), container))
+    .set(Services.server, new HttpServer(new ExpressAdapter(container), env.PORT))
+    .set(Services.logger, new ConsoleLogger())
+    .build()
 
-      const serverPromise = retry(() => this.#container.get(Services.server).listen(), retryOptions)
-      const amqpPromise = retry(() => this.#container.get(Services.queue).listen(), retryOptions)
-      const mongoDbPromise = retry(() => this.#container.get(Services.db).connect(), retryOptions)
-
-      //await all promises in parallel
-      const promises = await Promise.all([serverPromise, amqpPromise, mongoDbPromise])
-
-      console.log('all services connected successfully')
-
-      configureGracefulShutdown(promises[0], env.NODE_ENV, this.onShutdown.bind(this))
-    } catch (e) {
-      throw new Error('error on trying to run Application: ', e)
-    }
-  }
-
-  async onShutdown(signal) {
-    console.info('app async shutdow via signal: ', signal)
-    await this.#container.get(Services.db).disconnect()
-    await this.#container.get(Services.queue).close()
-    await this.#container.get(Services.server).httpServer.close()
-  }
+  new Application(container).run().catch(console.error.bind(console))
 }
-
-new Application().run().catch(console.error.bind(console))

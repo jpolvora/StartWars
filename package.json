@@ -1,52 +1,53 @@
 {
-	"name": "startwars",
-	"version": "0.0.1",
-	"description": "star wars API to mongodb collection",
-	"main": "src/index.js",
-	"type": "module",
-	"scripts": {
-		"test:coverage": "cross-env NODE_ENV=test NODE_OPTIONS=--experimental-vm-modules jest --no-cache --passWithNoTests --detectOpenHandles --verbose --coverage --forceExit",
-		"test": "cross-env NODE_ENV=test NODE_OPTIONS=--experimental-vm-modules jest --no-cache --passWithNoTests --runInBand --detectOpenHandles --verbose --forceExit",
-		"start": "node src/index.js",
-		"dev": "nodemon ./src/index.js  --watch .env --watch ./src",
-		"compose:up": "docker compose up",
-		"compose:rebuild": "docker compose up --build",
-		"compose:down": "docker compose down -v",
-		"gendoc": "node src/swagger.js",
-		"format": "npx @biomejs/biome format ./src/**/*.js --write",
-		"lint": "npx @biomejs/biome lint ./src/**/*.js --write"
-	},
-	"keywords": ["starwars", "swapi"],
-	"engines": {
-		"node": "20.9.0"
-	},
-	"author": {
-		"name": "Jone Polvora",
-		"email": "jpolvora+git@gmail.com"
-	},
-	"repository": {
-		"type": "git",
-		"url": "git+https://github.com/jpolvora/startwars.git"
-	},
-	"license": "MIT",
-	"dependencies": {
-		"amqplib": "^0.10.3",
-		"axios": "^1.6.2",
-		"debug": "^4.3.4",
-		"dotenv": "^16.3.1",
-		"envalid": "^8.0.0",
-		"express": "^4.18.2",
-		"http-graceful-shutdown": "^3.1.13",
-		"mongodb": "^6.3.0",
-		"swagger-autogen": "^2.23.7",
-		"swagger-ui-express": "^5.0.0"
-	},
-	"devDependencies": {
-		"@babel/plugin-syntax-import-attributes": "^7.23.3",
-		"@biomejs/biome": "1.4.1",
-		"cross-env": "^7.0.3",
-		"jest": "^29.7.0",
-		"nodemon": "^3.0.2",
-		"supertest": "^6.3.3"
-	}
+  "name": "startwars",
+  "version": "0.0.1",
+  "description": "star wars API to mongodb collection",
+  "main": "src/index.js",
+  "type": "module",
+  "scripts": {
+    "start": "node src/index.js",
+    "dev": "nodemon ./src/index.js  --watch .env --watch ./src",
+    "test:coverage": "cross-env NODE_ENV=test NODE_OPTIONS=--experimental-vm-modules jest --no-cache --passWithNoTests --detectOpenHandles --verbose --coverage --forceExit",
+    "test": "cross-env NODE_ENV=test NODE_OPTIONS=--experimental-vm-modules jest --no-cache --passWithNoTests --runInBand --detectOpenHandles --verbose --forceExit",
+    "compose:up": "docker compose up",
+    "compose:upd": "docker compose up -d",
+    "compose:rebuild": "docker compose up --build",
+    "compose:down": "docker compose down -v",
+    "gendoc": "node src/swagger.js",
+    "format": "npx @biomejs/biome format ./src/**/*.js --write",
+    "lint": "npx @biomejs/biome lint ./src/**/*.js --write"
+  },
+  "keywords": ["starwars", "swapi"],
+  "engines": {
+    "node": "20.9.0"
+  },
+  "author": {
+    "name": "Jone Polvora",
+    "email": "jpolvora+git@gmail.com"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jpolvora/startwars.git"
+  },
+  "license": "MIT",
+  "dependencies": {
+    "amqplib": "^0.10.3",
+    "axios": "^1.6.2",
+    "debug": "^4.3.4",
+    "dotenv": "^16.3.1",
+    "envalid": "^8.0.0",
+    "express": "^4.18.2",
+    "http-graceful-shutdown": "^3.1.13",
+    "mongodb": "^6.3.0",
+    "swagger-autogen": "^2.23.7",
+    "swagger-ui-express": "^5.0.0"
+  },
+  "devDependencies": {
+    "@babel/plugin-syntax-import-attributes": "^7.23.3",
+    "@biomejs/biome": "1.4.1",
+    "cross-env": "^7.0.3",
+    "jest": "^29.7.0",
+    "nodemon": "^3.0.2",
+    "supertest": "^6.3.3"
+  }
 }

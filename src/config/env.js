@@ -8,4 +8,6 @@ export const env = cleanEnv(process.env, {
   MONGODB_DBNAME: str(),
   API_URL: str(),
   ENABLE_SWAGGER: bool(),
+  WORKERS: num(),
+  AUTORESTART: bool(),
 })

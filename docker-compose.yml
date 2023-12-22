@@ -12,14 +12,17 @@ services:
     restart: on-failure
     build:
       context: .
-    container_name: startwars
+    container_name: startwars_container
     environment:
       PORT: 3000
       NODE_ENV: production
       AMQP_URL: amqp://admin:admin@rabbitmq:5672
       MONGODB_URI: mongodb://user:pass@mongodb
+      MONGODB_DBNAME: startwars
       API_URL: https://swapi.dev/api
       ENABLE_SWAGGER: true
+      WORKERS: 2
+      AUTORESTART: false
     ports:
       - 3000:3000
     depends_on:
@@ -43,10 +46,10 @@ services:
       - "5672:5672"
     healthcheck:
       test: rabbitmq-diagnostics check_port_connectivity
-      interval: 30s
-      timeout: 30s
-      retries: 3
-      start_period: 2m
+      interval: 10s
+      timeout: 1m
+      retries: 10
+      start_period: 1m
     volumes:
       - "./.tmp/rabbitmq_data:/var/lib/rabbitmq/mnesia"  
     environment:

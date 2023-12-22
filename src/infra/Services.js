@@ -4,4 +4,5 @@ export const Services = {
   server: 'server',
   db: 'db',
   queue: 'queue',
+  logger: 'logger',
 }

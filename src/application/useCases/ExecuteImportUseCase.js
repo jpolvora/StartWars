@@ -1,5 +1,6 @@
 import { Events } from '../../infra/Events.js'
 import { Services } from '../../infra/Services.js'
+import cluster from 'node:cluster'
 
 /**
  * Executes a scheduled import Job
@@ -33,7 +34,7 @@ export class ExecuteImportUseCase {
       return person
     }
 
-    console.log('executing import: %o', msg)
+    console.log('[%s] executing import: %o', cluster.worker?.id, msg)
     try {
       const response = await this.httpClient.get(msg.next)
       const data = JSON.parse(response.data)
