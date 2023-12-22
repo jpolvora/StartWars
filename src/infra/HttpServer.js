@@ -6,6 +6,7 @@ export class HttpServer {
   #httpServer = null
   #listening = false
   #app = null
+  port = 3000
 
   constructor(app, port) {
     this.#app = app

@@ -9,7 +9,7 @@ describe('HttpServer instance Integration tests', () => {
     await sut.listen()
     expect(sut.app).toBe(app)
     expect(sut.port).toBe(3001)
-    sut.httpServer.close()
+    await sut.httpServer.close()
   })
 
   it('should throw error httpServer when listening on same port', async () => {

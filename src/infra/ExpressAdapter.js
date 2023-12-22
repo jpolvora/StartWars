@@ -1,4 +1,6 @@
 import express from 'express'
+import cors from 'cors'
+import helmet from 'helmet'
 import { addImportRoutes, addPersonagensRoutes } from '../routes/index.js'
 
 import swaggerUi from 'swagger-ui-express'
@@ -18,11 +20,15 @@ export class ExpressAdapter {
     this.#isConfigured = true
 
     const app = express()
+    app.set('trust proxy', 1) // trust first proxy
+    app.disable('x-powered-by')
 
     //place here all needed middlewares
 
     app.use(express.static('public'))
     app.use(express.json())
+    app.use(cors())
+    app.use(helmet())
 
     const env = this.#container.get(Services.env)
     const enableSwagger = !!env.ENABLE_SWAGGER
@@ -46,6 +52,16 @@ export class ExpressAdapter {
       addRoute(router, this.#container)
       app.use('/api', router)
     }
+
+    // app.use((req, res, next) => {
+    //   res.status(404).send("Sorry can't find that!")
+    // })
+
+    // // custom error handler
+    // app.use((err, req, res, next) => {
+    //   console.error(err.stack)
+    //   res.status(500).send('Something broke!')
+    // })
 
     this.#app = app
     return app
