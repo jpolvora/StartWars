@@ -20,15 +20,19 @@ export class ExpressAdapter {
     this.#isConfigured = true
 
     const app = express()
-    app.set('trust proxy', 1) // trust first proxy
-    app.disable('x-powered-by')
 
     //place here all needed middlewares
-
+    app.use(helmet())
+    app.use(
+      cors({
+        origin: '*',
+        methods: ['GET', 'POST', 'DELETE', 'UPDATE', 'PUT', 'PATCH'],
+        credentials: true,
+        allowedHeaders: '*',
+      }),
+    )
     app.use(express.static('public'))
     app.use(express.json())
-    app.use(cors())
-    app.use(helmet())
 
     const env = this.#container.get(Services.env)
     const enableSwagger = !!env.ENABLE_SWAGGER
