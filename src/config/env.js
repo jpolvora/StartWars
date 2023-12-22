@@ -1,3 +1,4 @@
+import 'dotenv/config'
 import { cleanEnv, str, num, bool } from 'envalid'
 
 export const env = cleanEnv(process.env, {
@@ -10,4 +11,5 @@ export const env = cleanEnv(process.env, {
   ENABLE_SWAGGER: bool(),
   WORKERS: num(),
   AUTORESTART: bool(),
+  HOST: str(),
 })

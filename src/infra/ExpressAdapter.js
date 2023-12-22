@@ -36,7 +36,13 @@ export class ExpressAdapter {
         },
       })
 
-      app.use('/doc', swaggerUi.serve, swaggerUi.setup(swaggerFile.default))
+      app.use(
+        '/doc',
+        swaggerUi.serve,
+        swaggerUi.setup(swaggerFile.default, {
+          swaggerUrl: env.HOST,
+        }),
+      )
     }
 
     //import all routes here
