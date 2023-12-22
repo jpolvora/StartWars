@@ -5,14 +5,15 @@ async function onPreShutdown() {
 }
 
 function onShutdown(signal, callback) {
-  return new Promise(async (resolve) => {
+  return new Promise((resolve) => {
     console.log(`... called signal: ${signal}`)
     console.log('... in cleanup')
-    await callback(signal)
-    setTimeout(function () {
-      console.log('... cleanup finished')
-      resolve()
-    }, 1000)
+    return callback(signal).then(() => {
+      setTimeout(() => {
+        console.log('... cleanup finished')
+        resolve()
+      }, 1000)
+    })
   })
 }
 
@@ -22,8 +23,7 @@ function onFinally() {
 
 export function configureGracefulShutdown(httpServer, nodeEnv, callback) {
   return GracefulShutdown(httpServer, {
-    forceExit: false, // triggers process.exit() at the end of shutdown process
-    //development: nodeEnv === 'development',
+    development: nodeEnv === 'development',
     signals: 'SIGINT SIGTERM',
     timeout: 30000,
     forceExit: true,

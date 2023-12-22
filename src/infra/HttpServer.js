@@ -3,7 +3,7 @@ import debug from 'debug'
 
 const serverDebug = debug('server')
 export class HttpServer {
-  #httpServer
+  #httpServer = null
   #listening = false
   #app = null
 
@@ -15,9 +15,8 @@ export class HttpServer {
   listen() {
     return new Promise((resolve, reject) => {
       return this.#app.initialize().then((app) => {
-        if (this.#listening) return resolve(this.httpServer)
+        if (this.#listening) return resolve(this.#httpServer)
         this.#listening = true
-
         const httpServer = http.createServer(app)
         this.#httpServer = httpServer
 
