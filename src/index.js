@@ -14,7 +14,7 @@ import {
   ConsoleLogger,
 } from './infra/index.js'
 
-const workerCount = env.WORKERS || 2
+const workerCount = env.WORKERS
 const autoRestart = env.AUTORESTART
 const isPrimary = workerCount > 1 && cluster.isPrimary
 const isWorker = !cluster.isPrimary || workerCount < 2

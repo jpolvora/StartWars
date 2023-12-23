@@ -1,6 +1,6 @@
 {
   "name": "startwars",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "star wars API to mongodb collection",
   "main": "src/index.js",
   "type": "module",
@@ -17,10 +17,7 @@
     "format": "npx @biomejs/biome format ./src/**/*.js --write",
     "lint": "npx @biomejs/biome lint ./src/**/*.js --write"
   },
-  "keywords": [
-    "starwars",
-    "swapi"
-  ],
+  "keywords": ["starwars", "swapi"],
   "engines": {
     "node": "20.x"
   },

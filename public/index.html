@@ -1,78 +1,108 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <script
-      type="text/javascript"
-      src="https://cdn.jsdelivr.net/npm/handsontable/dist/handsontable.full.min.js"
-    ></script>
-    <link
-      rel="stylesheet"
-      href="https://cdn.jsdelivr.net/npm/handsontable/dist/handsontable.full.min.css"
-    />
-    <title>Document</title>
-  </head>
-  <body>
-    <button type="button" id="btnImportar">Importar Dados</button>
-    <div id="example"></div>
-  </body>
-  <script>
-    function render(data) {
-      const container = document.querySelector('#example')
-      const hot = new Handsontable(container, {
-        colHeaders: ['Id', 'Nome', 'Altura', 'Gênero'],
-        data,
-        contextMenu: true,
-        licenseKey: 'non-commercial-and-evaluation', // for non-commercial use only
-      })
 
-      console.log(
-        `Handsontable: v${Handsontable.version} (${Handsontable.buildDate})`
-      )
-    }
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/handsontable/dist/handsontable.full.min.js"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/handsontable/dist/handsontable.full.min.css" />
+  <title>Document</title>
+</head>
 
-    async function fetchData() {
-      const response = await fetch('/api/personagens')
-      const personagens = await response.json()
-      if (personagens.success) return personagens.data
-      return []
-    }
-
-    async function scheduleImport() {
-      //pega o token de autorização
-      const responseInitial = await fetch('/api/import')
-      const { uuid } = await responseInitial.json()
-      if (!uuid) return alert('token não recebido')
-
-      const update = {
-        uuid,
-      }
-
-      const options = {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(update),
-      }
-
-      const responseSchedule = await fetch('/api/import', options)
-      if (responseSchedule.status === 201) {
-        alert('ïmportação agendada!')
-      } else {
-        alert('importação não agendada')
-      }
-    }
-
-    document.addEventListener('DOMContentLoaded', async () => {
-      console.log('loaded')
-      const data = await fetchData()
-      await render(data)
-
-      document
-        .querySelector('#btnImportar')
-        .addEventListener('click', scheduleImport)
+<body>
+  <button type="button" id="btnImportar">Importar Dados</button>
+  <button type="button" id="btnLimpar">Apagar tudo</button>
+  <div id="example"></div>
+</body>
+<script>
+  function render(data) {
+    const container = document.querySelector('#example')
+    const hot = new Handsontable(container, {
+      colHeaders: ['Id', 'Nome', 'Altura', 'Gênero'],
+      data,
+      contextMenu: true,
+      licenseKey: 'non-commercial-and-evaluation', // for non-commercial use only
     })
-  </script>
+
+    console.log(
+      `Handsontable: v${Handsontable.version} (${Handsontable.buildDate})`
+    )
+  }
+
+  async function fetchData() {
+    const response = await fetch('/api/personagens')
+    const personagens = await response.json()
+    if (personagens.success) return personagens.data
+    return []
+  }
+
+  async function scheduleImport() {
+    //pega o token de autorização
+    const responseInitial = await fetch('/api/import')
+    const { uuid } = await responseInitial.json()
+    if (!uuid) return alert('token não recebido')
+
+    const update = {
+      uuid,
+    }
+
+    const options = {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(update),
+    }
+
+    const responseSchedule = await fetch('/api/import', options)
+    if (responseSchedule.status === 201) {
+      alert('ïmportação agendada!')   
+    } else {
+      alert('importação não agendada')
+    }
+  }
+
+  async function limpar() {
+    //pega o token de autorização
+    const responseInitial = await fetch('/api/manutencao')
+    const { uuid } = await responseInitial.json()
+    if (!uuid) return alert('token não recebido')
+
+    const update = {
+      uuid,
+    }
+
+    const options = {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(update),
+    }
+
+    const responseSchedule = await fetch('/api/manutencao', options)  
+  }
+
+  function update() {
+    return fetchData().then(render)
+  }
+
+  document.addEventListener('DOMContentLoaded', async () => {
+    document
+      .querySelector('#btnImportar')
+      .addEventListener('click', scheduleImport)
+
+    document
+      .querySelector('#btnLimpar')
+      .addEventListener('click', limpar)
+
+    update().then(() => {
+      setInterval(() => {
+        update()
+      }, 3000);
+    })
+
+  })
+</script>
+
 </html>
