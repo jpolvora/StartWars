@@ -15,7 +15,7 @@
   <div id="example"></div>
 </body>
 <script>
-  function render(data) {
+  function initialRender(data) {
     const container = document.querySelector('#example')
     const hot = new Handsontable(container, {
       colHeaders: ['Id', 'Nome', 'Altura', 'Gênero'],
@@ -27,6 +27,8 @@
     console.log(
       `Handsontable: v${Handsontable.version} (${Handsontable.buildDate})`
     )
+
+    return hot
   }
 
   async function fetchData() {
@@ -83,8 +85,12 @@
     const responseSchedule = await fetch('/api/manutencao', options)  
   }
 
-  function update() {
-    return fetchData().then(render)
+  let hot
+  function update() {    
+    return fetchData().then(data => {
+      if (!hot) hot = initialRender(data)
+      else hot.updateData(data)
+    })    
   }
 
   document.addEventListener('DOMContentLoaded', async () => {
