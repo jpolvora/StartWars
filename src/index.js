@@ -17,25 +17,21 @@ import {
 const workerCount = env.WORKERS
 const autoRestart = env.AUTORESTART
 const isPrimary = workerCount > 1 && cluster.isPrimary
-const isWorker = !cluster.isPrimary || workerCount < 2
 
 if (isPrimary) {
   console.log(`Primary process ${process.pid} is running`)
 
-  const workers = []
-
   for (let i = 0; i < workerCount; i++) {
-    const worker = cluster.fork()
-    workers.push(worker)
+    cluster.fork()
   }
 
   cluster.on('exit', (worker, code, signal) => {
-    console.log(`Worker process ${worker.process.pid} died. Restarting...`)
+    console.log(`Worker process ${worker.process.pid} ${code} ${signal} died. Restarting...`)
     if (autoRestart) cluster.fork()
   })
 }
 
-if (isWorker) {
+if (!isPrimary) {
   console.log(`Worker process ${cluster.worker?.id || process.pid} is running`)
   const container = new Registry()
   container

@@ -1,7 +1,7 @@
-import { ExecuteImportUseCase } from '../application/useCases/ExecuteImportUseCase.js'
-import { ImportFinishedUseCase } from '../application/useCases/ImportFinishedUseCase.js'
-import { Events } from './Events.js'
+import { ExecuteImportUseCase } from '../../application/useCases/ExecuteImportUseCase.js'
+import { ImportFinishedUseCase } from '../../application/useCases/ImportFinishedUseCase.js'
 import { adaptMessageToUseCase } from './adaptMessageToUseCase.js'
+import { Events } from '../Events.js'
 
 export class AmqpServer {
   #isConnected = false
@@ -35,7 +35,7 @@ export class AmqpServer {
 
   async subscribeAll(consumers) {
     for (const consumer of consumers) {
-      this.client.consume(consumer.event, adaptMessageToUseCase(this.container, consumer.useCase))
+      this.client.subscribe(consumer.event, adaptMessageToUseCase(this.container, consumer.useCase))
     }
   }
 

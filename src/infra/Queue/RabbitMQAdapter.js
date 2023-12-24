@@ -10,6 +10,12 @@ export class RabbitMQAdapter {
   async connect() {
     try {
       this.connection = await amqp.connect(this.url)
+      this.connection.on('error', (e) => {
+        console.error('error: %o ', e)
+        setTimeout(() => {
+          this.connect()
+        }, 1000)
+      })
       console.log('connected to rabbitmq')
     } catch (e) {
       console.error('Erro ao conectar no servidor AMQP: ', e)
@@ -21,7 +27,7 @@ export class RabbitMQAdapter {
     await this.connection.close()
   }
 
-  async consume(queueName, callback) {
+  async subscribe(queueName, callback) {
     const channel = await this.connection.createChannel()
     await channel.assertQueue(queueName, { durable: true })
     await channel.prefetch(1)

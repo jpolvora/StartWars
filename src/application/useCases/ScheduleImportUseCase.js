@@ -1,5 +1,6 @@
 import { Events } from '../../infra/Events.js'
 import { Services } from '../../infra/Services.js'
+import { ValidatorId } from '../validators/index.js'
 
 /**
  * Schedules an import Job by sending a message to the broker/queue
@@ -10,9 +11,13 @@ export class ScheduleImportUseCase {
     const env = container.get(Services.env)
     const initialUrl = `${env.API_URL}/people`
     this.initialUrl = initialUrl
+    this.validator = new ValidatorId()
   }
 
   async execute(input) {
+    const validationResult = await this.validator.validate({ id: input })
+    if (typeof validationResult !== 'boolean') return false
+
     const event = {
       uuid: input,
       next: this.initialUrl,
