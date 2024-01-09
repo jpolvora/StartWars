@@ -1,6 +1,8 @@
 import express from 'express'
 import cors from 'cors'
 import helmet from 'helmet'
+import favicon from 'express-favicon'
+
 import { addImportRoutes, addManutencaoRoutes, addPersonagensRoutes } from '../routes/index.js'
 import swaggerUi from 'swagger-ui-express'
 import { Services } from './Services.js'
@@ -23,6 +25,8 @@ export class ExpressAdapter {
     //place here all needed middlewares
 
     app.use(express.static('public'))
+
+    app.use(favicon('./public/favicon.png'))
 
     const env = this.#container.get(Services.env)
     const enableSwagger = !!env.ENABLE_SWAGGER
