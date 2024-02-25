@@ -9,6 +9,7 @@ export class Registry {
   //static instance = new Registry()
 
   set(key, value) {
+    if (!key || !value) return this
     if (this.#protected) throw new Error('Container cannot be changed after built')
     this.#dependencies[key] = value
 

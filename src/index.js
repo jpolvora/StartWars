@@ -9,6 +9,7 @@ import {
   HttpServer,
   MongoDbAdapter,
   RabbitMQAdapter,
+  AzureServiceBusConnector,
   Registry,
   Services,
   ConsoleLogger,
@@ -38,7 +39,14 @@ if (!isPrimary) {
     .set(Services.env, env)
     .set(Services.httpClient, new Axios({ baseURL: env.API_URL }))
     .set(Services.db, new MongoDbAdapter(env.MONGODB_URI, env.MONGODB_DBNAME))
-    .set(Services.queue, new AmqpServer(new RabbitMQAdapter(env.AMQP_URL), container))
+    .set(
+      Services.queue,
+      env.QUEUE_PROVIDER === 'rabbitmq' && new AmqpServer(new RabbitMQAdapter(env.AMQP_URL), container),
+    )
+    .set(
+      Services.queue,
+      env.QUEUE_PROVIDER === 'servicebus' && new AmqpServer(new AzureServiceBusConnector(env.SERVICE_BUS), container),
+    )
     .set(Services.server, new HttpServer(new ExpressAdapter(container), env.PORT))
     .set(Services.logger, new ConsoleLogger())
     .build()

@@ -12,4 +12,8 @@ export const env = cleanEnv(process.env, {
   WORKERS: num(),
   AUTORESTART: bool(),
   HOST: str(),
+  SERVICE_BUS: str(),
+  QUEUE_PROVIDER: str({
+    choices: ['rabbitmq', 'servicebus'],
+  }),
 })
